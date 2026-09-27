@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sky_blue">#FF1E88E5</color>
+    <color name="sky_blue_dark">#FF1565C0</color>
+    <color name="accent">#FFFFB300</color>
+    <color name="rain_blue">#FF1E88E5</color>
+    <color name="card_light">#FFF1F4F8</color>
+    <color name="card_dark">#FF1E2430</color>
+    <color name="sun_yellow">#FFFFC107</color>
+    <color name="cloud_gray">#FF90A4AE</color>
+    <color name="moon_gray">#FFB0BEC5</color>
+</resources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Thời Tiết VN</string>
+
+    <!-- Màn hình chính -->
+    <string name="now">Bây giờ</string>
+    <string name="today">Hôm nay</string>
+    <string name="hourly_title">72 giờ tới</string>
+    <string name="daily_title">Dự báo 3 ngày</string>
+    <string name="show_more">Xem thêm ngày</string>
+    <string name="show_less">Thu gọn</string>
+    <string name="feels_like_format">Cảm giác như %1$s</string>
+    <string name="updated_at">Cập nhật lúc %1$s</string>
+    <string name="updated_at_cached">Dữ liệu đã lưu, cập nhật lúc %1$s</string>
+    <string name="humidity">Độ ẩm</string>
+    <string name="wind">Gió</string>
+    <string name="precipitation">Lượng mưa</string>
+    <string name="percent_format">%1$d%%</string>
+    <string name="weather_icon">Biểu tượng thời tiết</string>
+    <string name="retry">Thử lại</string>
+    <string name="attribution">Dữ liệu thời tiết: Open-Meteo.com (ECMWF IFS HRES) · CC BY 4.0</string>
+
+    <!-- Tìm kiếm -->
+    <string name="search_title">Tìm địa điểm</string>
+    <string name="search_hint">Tỉnh/thành hoặc quận/huyện, ví dụ Hoàn Kiếm</string>
+    <string name="search_results">Kết quả</string>
+    <string name="search_no_results">Không tìm thấy địa điểm</string>
+    <string name="saved_cities">Địa điểm đã lưu</string>
+    <string name="saved_cities_empty">Chưa có địa điểm nào được lưu</string>
+    <string name="use_current_location">Dùng vị trí của tôi</string>
+    <string name="current_location">Vị trí của tôi</string>
+    <string name="delete">Xoá</string>
+
+    <!-- Quyền -->
+    <string name="location_permission_title">Cho phép truy cập vị trí</string>
+    <string name="location_permission_message">Ứng dụng cần vị trí của bạn để hiển thị thời tiết chính xác tại nơi bạn đang đứng. Bạn cũng có thể tự chọn tỉnh/thành hoặc quận/huyện.</string>
+    <string name="allow">Cho phép</string>
+    <string name="cancel">Huỷ</string>
+
+    <!-- Lỗi -->
+    <string name="error_no_network">Không có kết nối mạng. Hiển thị dữ liệu đã lưu nếu có.</string>
+    <string name="error_api">Không tải được dự báo. Vui lòng thử lại.</string>
+    <string name="error_location">Không lấy được vị trí của bạn.</string>
+    <string name="error_location_permission">Bạn đã từ chối quyền vị trí. Vui lòng chọn địa điểm thủ công.</string>
+    <string name="error_unknown">Đã xảy ra lỗi.</string>
+
+    <!-- Cài đặt -->
+    <string name="settings">Cài đặt</string>
+    <string name="temperature_unit">Đơn vị nhiệt độ</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="wind_unit">Đơn vị gió</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_ms">m/s</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="language_english">English</string>
+    <string name="language_system">Theo hệ thống</string>
+    <string name="theme">Giao diện</string>
+    <string name="theme_light">Sáng</string>
+    <string name="theme_dark">Tối</string>
+    <string name="theme_system">Hệ thống</string>
+    <string name="refresh_interval">Làm mới khi đang dùng ứng dụng</string>
+    <string name="background_refresh">Làm mới nền</string>
+    <string name="minutes_format">%1$d phút</string>
+    <string name="hours_format">%1$d giờ</string>
+
+    <!-- Giới thiệu -->
+    <string name="about">Giới thiệu</string>
+    <string name="version_format">Phiên bản %1$s</string>
+    <string name="about_body">Dữ liệu thời tiết lấy từ Open-Meteo, dùng mô hình ECMWF IFS HRES – mô hình toàn cầu độ phân giải 9 km, cập nhật 6 giờ một lần.\n\nDữ liệu được cấp phép theo CC BY 4.0. Gói miễn phí của Open-Meteo chỉ dành cho mục đích phi thương mại.</string>
+    <string name="open_meteo_website">Mở Open-Meteo.com</string>
+
+    <!-- Tiện ích màn hình chính -->
+    <string name="widget_no_data">Mở ứng dụng để tải dữ liệu</string>
+
+    <!-- Mã thời tiết WMO -->
+    <string name="wmo_0">Trời quang</string>
+    <string name="wmo_1">Ít mây</string>
+    <string name="wmo_2">Mây rải rác</string>
+    <string name="wmo_3">Nhiều mây</string>
+    <string name="wmo_fog">Sương mù</string>
+    <string name="wmo_drizzle_light">Mưa phùn nhẹ</string>
+    <string name="wmo_drizzle_moderate">Mưa phùn</string>
+    <string name="wmo_drizzle_dense">Mưa phùn nặng hạt</string>
+    <string name="wmo_freezing_drizzle">Mưa phùn đóng băng</string>
+    <string name="wmo_rain_slight">Mưa nhẹ</string>
+    <string name="wmo_rain_moderate">Mưa vừa</string>
+    <string name="wmo_rain_heavy">Mưa to</string>
+    <string name="wmo_freezing_rain">Mưa đóng băng</string>
+    <string name="wmo_snow">Tuyết</string>
+    <string name="wmo_showers_slight">Mưa rào nhẹ</string>
+    <string name="wmo_showers_moderate">Mưa rào</string>
+    <string name="wmo_showers_violent">Mưa rào rất to</string>
+    <string name="wmo_snow_showers">Mưa tuyết</string>
+    <string name="wmo_thunderstorm">Dông</string>
+    <string name="wmo_thunderstorm_hail">Dông kèm mưa đá</string>
+    <string name="wmo_unknown">Không xác định</string>
+</resources>

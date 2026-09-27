@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurface">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView style="@style/SettingsHeader" android:text="@string/temperature_unit" />
+            <RadioGroup
+                android:id="@+id/groupTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton android:id="@+id/radioCelsius" style="@style/SettingsRadio" android:text="@string/unit_celsius" />
+                <RadioButton android:id="@+id/radioFahrenheit" style="@style/SettingsRadio" android:text="@string/unit_fahrenheit" />
+            </RadioGroup>
+
+            <TextView style="@style/SettingsHeader" android:text="@string/wind_unit" />
+            <RadioGroup
+                android:id="@+id/groupWind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton android:id="@+id/radioKmh" style="@style/SettingsRadio" android:text="@string/unit_kmh" />
+                <RadioButton android:id="@+id/radioMs" style="@style/SettingsRadio" android:text="@string/unit_ms" />
+            </RadioGroup>
+
+            <TextView style="@style/SettingsHeader" android:text="@string/language" />
+            <RadioGroup
+                android:id="@+id/groupLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioButton android:id="@+id/radioVietnamese" style="@style/SettingsRadio" android:text="@string/language_vietnamese" />
+                <RadioButton android:id="@+id/radioEnglish" style="@style/SettingsRadio" android:text="@string/language_english" />
+                <RadioButton android:id="@+id/radioSystemLanguage" style="@style/SettingsRadio" android:text="@string/language_system" />
+            </RadioGroup>
+
+            <TextView style="@style/SettingsHeader" android:text="@string/theme" />
+            <RadioGroup
+                android:id="@+id/groupTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton android:id="@+id/radioLight" style="@style/SettingsRadio" android:text="@string/theme_light" />
+                <RadioButton android:id="@+id/radioDark" style="@style/SettingsRadio" android:text="@string/theme_dark" />
+                <RadioButton android:id="@+id/radioSystemTheme" style="@style/SettingsRadio" android:text="@string/theme_system" />
+            </RadioGroup>
+
+            <TextView style="@style/SettingsHeader" android:text="@string/refresh_interval" />
+            <Spinner
+                android:id="@+id/spinnerRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView style="@style/SettingsHeader" android:text="@string/background_refresh" />
+            <Spinner
+                android:id="@+id/spinnerBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/rowAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:textSize="16sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:text="@string/about" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
