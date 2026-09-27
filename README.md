@@ -15,6 +15,11 @@ Vietnamese-first interface, and forecasts from **Open-Meteo using the ECMWF IFS 
 Build a release APK/AAB with `./gradlew assembleRelease` or `./gradlew bundleRelease`
 after adding your signing config.
 
+## If the app cannot load data
+
+See **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**, and run
+**Settings → Connection diagnostics** on the device.
+
 ## Building an APK without Android Studio
 
 Push this project to GitHub and the included workflows build the APK for you.

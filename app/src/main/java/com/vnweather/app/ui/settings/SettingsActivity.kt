@@ -10,7 +10,10 @@ import com.vnweather.app.WeatherApp
 import com.vnweather.app.data.local.SettingsStore
 import com.vnweather.app.databinding.ActivitySettingsBinding
 import com.vnweather.app.ui.widget.WidgetRefreshScheduler
+import com.vnweather.app.util.Diagnostics
 import com.vnweather.app.util.LocaleHelper
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 /** Units, language, refresh interval, theme, and a link to the About screen. */
 class SettingsActivity : AppCompatActivity() {
@@ -38,6 +41,8 @@ class SettingsActivity : AppCompatActivity() {
         binding.rowAbout.setOnClickListener {
             startActivity(Intent(this, AboutActivity::class.java))
         }
+
+        binding.rowDiagnostics.setOnClickListener { runDiagnostics() }
     }
 
     private fun setupTemperature() {
@@ -136,6 +141,31 @@ class SettingsActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
         }
+
+    /** Runs a live connection self-test and shows the raw result. */
+    private fun runDiagnostics() {
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(R.string.diagnostics)
+            .setMessage(R.string.diagnostics_running)
+            .setCancelable(true)
+            .show()
+
+        lifecycleScope.launch {
+            val report = Diagnostics.run(this@SettingsActivity)
+            dialog.dismiss()
+            androidx.appcompat.app.AlertDialog.Builder(this@SettingsActivity)
+                .setTitle(R.string.diagnostics)
+                .setMessage(report)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(R.string.copy) { _, _ ->
+                    val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    clipboard.setPrimaryClip(
+                        android.content.ClipData.newPlainText("diagnostics", report)
+                    )
+                }
+                .show()
+        }
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         finish()

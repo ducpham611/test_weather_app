@@ -8,13 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
 import com.vnweather.app.domain.City
-import com.vnweather.app.domain.ErrorType
 import com.vnweather.app.domain.Forecast
 import com.vnweather.app.domain.UiState
+import com.vnweather.app.util.AppError
 import com.vnweather.app.util.LocationProvider
-import com.vnweather.app.util.NetworkMonitor
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -30,6 +28,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _showAllDays = MutableLiveData(false)
     val showAllDays: LiveData<Boolean> = _showAllDays
 
+    /** Raw exception text from the last failure, for the diagnostics screen. */
+    var lastErrorDetail: String? = null
+        private set
+
     private var currentCity: City = savedCities.getSelectedCity()
 
     val city: City get() = currentCity
@@ -43,26 +45,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 resolveCurrentLocation()
             }
 
-            if (forceRefresh && !NetworkMonitor.isOnline(application)) {
-                _state.value = if (stale != null) {
-                    UiState.Error(ErrorType.NO_NETWORK, stale)
-                } else {
-                    UiState.Error(ErrorType.NO_NETWORK)
-                }
-                return@launch
-            }
-
+            // Never pre-judge connectivity. The system flag reports "offline"
+            // on some lab devices and captive networks even when traffic flows
+            // fine, so always attempt the request and report what really broke.
             val result = repository.getForecast(currentCity, forceRefresh)
             _state.value = result.fold(
-                onSuccess = { UiState.Success(it) },
+                onSuccess = {
+                    lastErrorDetail = null
+                    UiState.Success(it)
+                },
                 onFailure = { error ->
-                    val type = when {
-                        error is IOException && !NetworkMonitor.isOnline(application) ->
-                            ErrorType.NO_NETWORK
-                        error is IOException -> ErrorType.NO_NETWORK
-                        else -> ErrorType.API_ERROR
-                    }
-                    UiState.Error(type, stale)
+                    lastErrorDetail = AppError.detail(error)
+                    UiState.Error(AppError.classify(error), stale)
                 }
             )
         }

@@ -93,6 +93,18 @@ class MainActivity : AppCompatActivity() {
         binding.buttonRetry.setOnClickListener { viewModel.load(forceRefresh = true) }
         binding.buttonShowMore.setOnClickListener { viewModel.toggleShowAllDays() }
         binding.headerCity.setOnClickListener { openSearch() }
+
+        // Long-press the timestamp to see the raw failure. Invaluable when the
+        // UI says one thing and the network is doing another.
+        binding.textUpdatedAt.setOnLongClickListener {
+            val detail = viewModel.lastErrorDetail ?: getString(R.string.no_recent_error)
+            AlertDialog.Builder(this)
+                .setTitle(R.string.last_error)
+                .setMessage(detail)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+            true
+        }
     }
 
     private fun observe() {
@@ -190,6 +202,9 @@ class MainActivity : AppCompatActivity() {
     private fun messageFor(type: ErrorType): String = getString(
         when (type) {
             ErrorType.NO_NETWORK -> R.string.error_no_network
+            ErrorType.DNS_ERROR -> R.string.error_dns
+            ErrorType.TLS_ERROR -> R.string.error_tls
+            ErrorType.TIMEOUT -> R.string.error_timeout
             ErrorType.API_ERROR -> R.string.error_api
             ErrorType.LOCATION_UNAVAILABLE -> R.string.error_location
             ErrorType.UNKNOWN -> R.string.error_unknown

@@ -29,6 +29,10 @@ class WeatherApp : Application() {
     lateinit var repository: WeatherRepository
         private set
 
+    /** Surfaced in the diagnostics screen: modern TLS is the usual suspect. */
+    var conscryptInstalled: Boolean = false
+        private set
+
     override fun onCreate() {
         installConscrypt()
         super.onCreate()
@@ -49,6 +53,8 @@ class WeatherApp : Application() {
     private fun installConscrypt() {
         try {
             Security.insertProviderAt(Conscrypt.newProvider(), 1)
+            conscryptInstalled = true
+            Log.i(TAG, "Conscrypt installed")
         } catch (t: Throwable) {
             // Very old / unusual devices may refuse the provider. OkHttp will
             // fall back to the platform TLS stack instead of crashing.

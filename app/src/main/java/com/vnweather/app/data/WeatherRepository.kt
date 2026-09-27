@@ -50,7 +50,10 @@ class WeatherRepository(
             cache.write(forecast)
             Result.success(forecast)
         } catch (e: Exception) {
-            if (cached != null) Result.success(cached) else Result.failure(e)
+            // Always propagate the real error. The ViewModel decides whether to
+            // keep showing cached data alongside it, so a TLS or DNS problem is
+            // never silently swallowed.
+            Result.failure(e)
         }
     }
 

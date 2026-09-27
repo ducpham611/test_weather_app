@@ -39,10 +39,16 @@
 
     <!-- Lỗi -->
     <string name="error_no_network">Không có kết nối mạng. Hiển thị dữ liệu đã lưu nếu có.</string>
+    <string name="error_dns">Không kết nối được tới máy chủ thời tiết. Kiểm tra kết nối mạng, hoặc mạng này có thể yêu cầu proxy.</string>
+    <string name="error_tls">Kết nối bảo mật thất bại. Hãy kiểm tra ngày giờ trên thiết bị có đúng không.</string>
+    <string name="error_timeout">Kết nối quá hạn. Mạng đang rất chậm.</string>
     <string name="error_api">Không tải được dự báo. Vui lòng thử lại.</string>
     <string name="error_location">Không lấy được vị trí của bạn.</string>
     <string name="error_location_permission">Bạn đã từ chối quyền vị trí. Vui lòng chọn địa điểm thủ công.</string>
     <string name="error_unknown">Đã xảy ra lỗi.</string>
+
+    <string name="last_error">Lỗi gần nhất</string>
+    <string name="no_recent_error">Không có lỗi nào gần đây.</string>
 
     <!-- Cài đặt -->
     <string name="settings">Cài đặt</string>
@@ -64,6 +70,10 @@
     <string name="background_refresh">Làm mới nền</string>
     <string name="minutes_format">%1$d phút</string>
     <string name="hours_format">%1$d giờ</string>
+
+    <string name="diagnostics">Chẩn đoán kết nối</string>
+    <string name="diagnostics_running">Đang kiểm tra kết nối…</string>
+    <string name="copy">Sao chép</string>
 
     <!-- Giới thiệu -->
     <string name="about">Giới thiệu</string>

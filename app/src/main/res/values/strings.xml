@@ -39,10 +39,16 @@
 
     <!-- Errors -->
     <string name="error_no_network">No internet connection. Showing saved data if available.</string>
+    <string name="error_dns">Cannot reach the weather server. Check your connection, or the network may require a proxy.</string>
+    <string name="error_tls">Secure connection failed. Check that the device date and time are correct.</string>
+    <string name="error_timeout">The connection timed out. The network is very slow.</string>
     <string name="error_api">Could not load the forecast. Please try again.</string>
     <string name="error_location">Could not get your location.</string>
     <string name="error_location_permission">Location permission denied. Please pick a place by hand.</string>
     <string name="error_unknown">Something went wrong.</string>
+
+    <string name="last_error">Last error</string>
+    <string name="no_recent_error">No recent error.</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
@@ -64,6 +70,10 @@
     <string name="background_refresh">Background refresh</string>
     <string name="minutes_format">%1$d minutes</string>
     <string name="hours_format">%1$d hours</string>
+
+    <string name="diagnostics">Connection diagnostics</string>
+    <string name="diagnostics_running">Testing the connection…</string>
+    <string name="copy">Copy</string>
 
     <!-- About -->
     <string name="about">About</string>

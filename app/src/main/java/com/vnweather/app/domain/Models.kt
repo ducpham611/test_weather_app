@@ -104,4 +104,12 @@ sealed class UiState {
     data class Error(val type: ErrorType, val staleForecast: Forecast? = null) : UiState()
 }
 
-enum class ErrorType { NO_NETWORK, API_ERROR, LOCATION_UNAVAILABLE, UNKNOWN }
+enum class ErrorType {
+    NO_NETWORK,
+    DNS_ERROR,
+    TLS_ERROR,
+    TIMEOUT,
+    API_ERROR,
+    LOCATION_UNAVAILABLE,
+    UNKNOWN
+}
