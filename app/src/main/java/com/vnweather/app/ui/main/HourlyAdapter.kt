@@ -13,9 +13,12 @@ import com.vnweather.app.util.Formatters
 import com.vnweather.app.util.LocaleHelper
 
 /**
- * Horizontal strip of hourly entries. The list is pre-trimmed to the next
- * 72 hours (3 full days), which is inside the ECMWF IFS HRES native hourly
- * window, so every cell is real model output rather than interpolation.
+ * Horizontal strip of hourly entries, pre-trimmed to the next 24 hours.
+ * That is well inside the ECMWF IFS HRES native hourly window, so every cell
+ * is real model output rather than interpolation.
+ *
+ * Cells size themselves to their content (with a 64dp minimum) so a larger
+ * system font widens them instead of wrapping the text.
  */
 class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
 

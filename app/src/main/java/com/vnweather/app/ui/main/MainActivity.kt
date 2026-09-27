@@ -3,10 +3,13 @@ package com.vnweather.app.ui.main
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -62,11 +65,43 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        applyFontScaleLayout()
         setupLists()
         setupActions()
         observe()
 
         viewModel.load()
+    }
+
+    /**
+     * The three-across detail row (humidity / wind / rain) has no room left
+     * once the user raises the system font size, which is what made labels
+     * wrap and push the layout around. Above ~1.15x we stack the cells
+     * vertically instead. Resource qualifiers cannot express font scale, so
+     * this has to happen in code.
+     */
+    private fun applyFontScaleLayout() {
+        val fontScale = resources.configuration.fontScale
+        val stack = fontScale > 1.15f
+        val row = binding.detailRow
+
+        row.orientation = if (stack) LinearLayout.VERTICAL else LinearLayout.HORIZONTAL
+
+        for (i in 0 until row.childCount) {
+            val child = row.getChildAt(i)
+            val params = child.layoutParams as LinearLayout.LayoutParams
+            if (stack) {
+                // Weighted 0dp widths collapse to nothing in a vertical row.
+                params.width = LinearLayout.LayoutParams.MATCH_PARENT
+                params.weight = 0f
+            } else {
+                params.width = 0
+                params.weight = 1f
+            }
+            child.layoutParams = params
+            (child as? LinearLayout)?.gravity =
+                if (stack) Gravity.CENTER_VERTICAL else Gravity.CENTER_HORIZONTAL
+        }
     }
 
     private fun setupLists() {
@@ -174,7 +209,7 @@ class MainActivity : AppCompatActivity() {
             Formatters.clockLabel(forecast.fetchedAtMillis, locale)
         )
 
-        // Hourly: next 72 hours = the full 3-day hourly view.
+        // Hourly: the next 24 hours.
         hourlyAdapter.temperatureUnit = tempUnit
         hourlyAdapter.submitList(upcomingHours(forecast, HOURS_SHOWN))
 
@@ -257,6 +292,11 @@ class MainActivity : AppCompatActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        applyFontScaleLayout()
+    }
+
     override fun onResume() {
         super.onResume()
         // Settings (units / language) may have changed while we were away.
@@ -264,7 +304,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private companion object {
-        const val HOURS_SHOWN = 72          // 3 days, hour by hour
+        const val HOURS_SHOWN = 24          // next 24 hours
         const val ONE_HOUR_MILLIS = 60 * 60 * 1000L
     }
 }

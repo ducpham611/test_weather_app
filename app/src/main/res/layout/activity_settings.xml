@@ -25,7 +25,7 @@
                 android:id="@+id/groupTemperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <RadioButton android:id="@+id/radioCelsius" style="@style/SettingsRadio" android:text="@string/unit_celsius" />
                 <RadioButton android:id="@+id/radioFahrenheit" style="@style/SettingsRadio" android:text="@string/unit_fahrenheit" />
             </RadioGroup>
@@ -35,7 +35,7 @@
                 android:id="@+id/groupWind"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <RadioButton android:id="@+id/radioKmh" style="@style/SettingsRadio" android:text="@string/unit_kmh" />
                 <RadioButton android:id="@+id/radioMs" style="@style/SettingsRadio" android:text="@string/unit_ms" />
             </RadioGroup>
@@ -56,7 +56,7 @@
                 android:id="@+id/groupTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <RadioButton android:id="@+id/radioLight" style="@style/SettingsRadio" android:text="@string/theme_light" />
                 <RadioButton android:id="@+id/radioDark" style="@style/SettingsRadio" android:text="@string/theme_dark" />
                 <RadioButton android:id="@+id/radioSystemTheme" style="@style/SettingsRadio" android:text="@string/theme_system" />

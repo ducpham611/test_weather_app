@@ -5,8 +5,8 @@
     <!-- Main screen -->
     <string name="now">Now</string>
     <string name="today">Today</string>
-    <string name="hourly_title">Next 72 hours</string>
-    <string name="daily_title">3-day forecast</string>
+    <string name="hourly_title">Next 24 hours</string>
+    <string name="daily_title">Upcoming days forecast</string>
     <string name="show_more">See more days</string>
     <string name="show_less">Show less</string>
     <string name="feels_like_format">Feels like %1$s</string>

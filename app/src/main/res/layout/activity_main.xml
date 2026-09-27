@@ -52,16 +52,26 @@
 
                     <TextView
                         android:id="@+id/textCityName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="?android:attr/textColorPrimary" />
 
                     <TextView
                         android:id="@+id/textCitySubtitle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:textSize="13sp"
                         android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>
@@ -135,13 +145,17 @@
                             android:id="@+id/textTemperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
                             android:textSize="56sp"
                             android:textColor="?android:attr/textColorPrimary" />
 
                         <TextView
                             android:id="@+id/textCondition"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingStart="24dp"
+                            android:paddingEnd="24dp"
                             android:textSize="16sp"
                             android:textColor="?android:attr/textColorPrimary" />
 
@@ -164,6 +178,7 @@
 
                     <!-- Detail row -->
                     <LinearLayout
+                        android:id="@+id/detailRow"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -176,7 +191,12 @@
                         <LinearLayout
                             style="@style/DetailCell">
                             <TextView style="@style/DetailLabel" android:text="@string/humidity" />
-                            <TextView android:id="@+id/textHumidity" style="@style/DetailValue" />
+                            <TextView
+                                android:id="@+id/textHumidity"
+                                style="@style/DetailValue"
+                                android:drawableStart="@drawable/ic_humidity"
+                                android:drawablePadding="4dp"
+                                android:gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout style="@style/DetailCell">

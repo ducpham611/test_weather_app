@@ -41,9 +41,11 @@ See **[BUILD_APK.md](BUILD_APK.md)** for the full walkthrough.
 ### Features
 
 - **Current weather** — temperature, feels-like, condition, humidity, wind, rain.
-- **72-hour hourly forecast** — the full 3 days, hour by hour. This sits inside IFS HRES's
-  native 90-hour hourly window, so every cell is real model output.
-- **3-day daily forecast** by default, expandable to 15 days with **"Xem thêm ngày"**.
+- **24-hour hourly forecast** — well inside IFS HRES's native 90-hour hourly window,
+  so every cell is real model output rather than interpolation.
+- **Upcoming days forecast** — 3 days by default, expandable to 15 with **"Xem thêm ngày"**.
+- **Responsive to the system font size** — the detail row stacks vertically above ~1.15x
+  scaling, and every row uses flexible widths so nothing wraps or overlaps.
 - **Place picker** — search any city or district through Open-Meteo geocoding with
   `language=vi`, save favourites, or follow GPS.
 - **Offline** — the last forecast per place is cached and shown with

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Flat, fixed-size cell: cheap to inflate and rebind while scrolling. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="64dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:minWidth="64dp"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
@@ -12,6 +15,7 @@
         android:id="@+id/textHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:textSize="12sp"
         android:textColor="?android:attr/textColorSecondary" />
 
@@ -27,6 +31,7 @@
         android:id="@+id/textTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="?android:attr/textColorPrimary" />
@@ -35,6 +40,7 @@
         android:id="@+id/textRain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:textSize="11sp"
         android:textColor="@color/rain_blue" />
 </LinearLayout>

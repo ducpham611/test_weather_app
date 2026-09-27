@@ -5,8 +5,8 @@
     <!-- Màn hình chính -->
     <string name="now">Bây giờ</string>
     <string name="today">Hôm nay</string>
-    <string name="hourly_title">72 giờ tới</string>
-    <string name="daily_title">Dự báo 3 ngày</string>
+    <string name="hourly_title">24 giờ tới</string>
+    <string name="daily_title">Dự báo những ngày tới</string>
     <string name="show_more">Xem thêm ngày</string>
     <string name="show_less">Thu gọn</string>
     <string name="feels_like_format">Cảm giác như %1$s</string>
