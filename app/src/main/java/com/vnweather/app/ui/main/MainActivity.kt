@@ -110,9 +110,13 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity, LinearLayoutManager.HORIZONTAL, false
             )
             adapter = hourlyAdapter
-            setHasFixedSize(true)
-            // Small, fixed-height cells: keeping views around avoids re-inflation
-            // jank while scrolling on low-end devices.
+            // NEVER setHasFixedSize(true) here. This list is wrap_content inside
+            // a ScrollView, so its height depends on its contents. With the flag
+            // on, RecyclerView skips the relayout when the adapter finally gets
+            // data, the height stays 0, and the section looks empty until some
+            // other change forces a fresh layout pass.
+            setHasFixedSize(false)
+            // Keeping views around avoids re-inflation jank on low-end devices.
             setItemViewCacheSize(12)
         }
         binding.recyclerDaily.apply {
@@ -211,7 +215,12 @@ class MainActivity : AppCompatActivity() {
 
         // Hourly: the next 24 hours.
         hourlyAdapter.temperatureUnit = tempUnit
-        hourlyAdapter.submitList(upcomingHours(forecast, HOURS_SHOWN))
+        hourlyAdapter.submitList(upcomingHours(forecast, HOURS_SHOWN)) {
+            // submitList computes its diff on a background thread; request a
+            // layout pass after it commits so the ScrollView picks up the
+            // list's real height on the very first load.
+            binding.recyclerHourly.requestLayout()
+        }
 
         // Daily: 3 days by default, all available days when expanded.
         val visibleDays = viewModel.visibleDays(forecast).coerceAtMost(forecast.daily.size)
