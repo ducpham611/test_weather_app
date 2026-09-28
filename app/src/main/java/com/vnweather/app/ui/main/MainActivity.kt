@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     private val hourlyAdapter = HourlyAdapter()
-    private val dailyAdapter = DailyAdapter()
+    private lateinit var dailyList: DailyListRenderer
 
     private val searchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -119,12 +119,7 @@ class MainActivity : AppCompatActivity() {
             // Keeping views around avoids re-inflation jank on low-end devices.
             setItemViewCacheSize(12)
         }
-        binding.recyclerDaily.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = dailyAdapter
-            setHasFixedSize(false)
-            isNestedScrollingEnabled = false
-        }
+        dailyList = DailyListRenderer(binding.dailyContainer)
     }
 
     private fun setupActions() {
@@ -227,10 +222,8 @@ class MainActivity : AppCompatActivity() {
         // The list is wrap_content with nested scrolling off, so all 7 rows
         // render inline inside the page scroll - no inner scrollbar.
         val visibleDays = viewModel.visibleDays(forecast).coerceAtMost(forecast.daily.size)
-        dailyAdapter.temperatureUnit = tempUnit
-        dailyAdapter.submitList(forecast.daily.take(visibleDays)) {
-            binding.recyclerDaily.requestLayout()
-        }
+        dailyList.temperatureUnit = tempUnit
+        dailyList.render(forecast.daily.take(visibleDays))
 
         binding.textAttribution.setText(
             if (viewModel.isUsingGfs) R.string.attribution_gfs else R.string.attribution

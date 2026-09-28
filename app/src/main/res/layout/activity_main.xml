@@ -275,14 +275,16 @@
                             android:text="@string/temp_max" />
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerDaily"
+                    <!-- Plain container, not a RecyclerView: the section has to
+                         grow with its content so the page scrolls as one piece
+                         and every expanded day is visible. -->
+                    <LinearLayout
+                        android:id="@+id/dailyContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
+                        android:orientation="vertical"
                         android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:overScrollMode="never" />
+                        android:paddingEnd="12dp" />
 
                     <!-- A TextView, not a Button. Under a MaterialComponents
                          theme <Button> inflates as MaterialButton, which ignores
