@@ -279,16 +279,15 @@
                         android:id="@+id/recyclerDaily"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
                         android:paddingStart="12dp"
                         android:paddingEnd="12dp"
                         android:overScrollMode="never" />
 
-                    <!--
-                        A TextView, not a Button. Under a MaterialComponents
-                        theme a <Button> is inflated as MaterialButton, which
-                        ignores android:background and keeps its filled blue
-                        default - so blue text on it was invisible.
-                    -->
+                    <!-- A TextView, not a Button. Under a MaterialComponents
+                         theme <Button> inflates as MaterialButton, which ignores
+                         android:background and keeps its own blue fill, leaving
+                         blue text on blue. -->
                     <TextView
                         android:id="@+id/buttonShowMore"
                         android:layout_width="wrap_content"
@@ -303,8 +302,10 @@
                         android:gravity="center"
                         android:paddingStart="24dp"
                         android:paddingEnd="24dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
                         android:textAllCaps="true"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="@color/sky_blue"
                         android:text="@string/show_more" />

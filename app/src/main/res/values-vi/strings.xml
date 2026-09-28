@@ -21,7 +21,6 @@
     <string name="weather_icon">Biểu tượng thời tiết</string>
     <string name="retry">Thử lại</string>
     <string name="attribution">Dữ liệu thời tiết: Open-Meteo.com (ECMWF IFS HRES) · CC BY 4.0</string>
-    <string name="attribution_gfs">Dữ liệu thời tiết: Open-Meteo.com (NOAA GFS) · CC BY 4.0</string>
 
     <!-- Tìm kiếm -->
     <string name="search_title">Tìm địa điểm</string>
@@ -55,10 +54,6 @@
 
     <!-- Cài đặt -->
     <string name="settings">Cài đặt</string>
-    <string name="weather_model">Mô hình dự báo</string>
-    <string name="model_ecmwf">ECMWF IFS HRES — 9 km (khuyến nghị)</string>
-    <string name="model_gfs">NOAA GFS — 11 km</string>
-    <string name="model_note">Cả hai đều có dữ liệu theo giờ và xác suất mưa. ECMWF có độ phân giải mịn hơn; khi đổi mô hình, dự báo sẽ được tải lại.</string>
     <string name="temperature_unit">Đơn vị nhiệt độ</string>
     <string name="unit_celsius">°C</string>
     <string name="unit_fahrenheit">°F</string>
@@ -114,4 +109,9 @@
     <string name="wmo_thunderstorm_heavy">Dông mạnh</string>
     <string name="wmo_thunderstorm_hail">Dông kèm mưa đá</string>
     <string name="wmo_unknown">Không xác định</string>
+    <string name="weather_model">Mô hình dự báo</string>
+    <string name="model_ecmwf">ECMWF IFS HRES (khuyên dùng)</string>
+    <string name="model_gfs">NOAA GFS</string>
+    <string name="model_note">ECMWF là mô hình châu Âu độ phân giải 9 km, thường chính xác nhất cho Việt Nam. NOAA GFS khoảng 11 km nhưng có dữ liệu theo giờ xa hơn. Đổi mô hình sẽ tải lại dự báo.</string>
+    <string name="attribution_gfs">Dữ liệu thời tiết: Open-Meteo.com (NOAA GFS) · CC BY 4.0</string>
 </resources>

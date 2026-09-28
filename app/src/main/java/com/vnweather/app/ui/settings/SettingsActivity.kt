@@ -9,6 +9,7 @@ import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
 import com.vnweather.app.data.local.SettingsStore
 import com.vnweather.app.databinding.ActivitySettingsBinding
+import com.vnweather.app.ui.widget.WeatherWidgetProvider
 import com.vnweather.app.ui.widget.WidgetRefreshScheduler
 import com.vnweather.app.util.Diagnostics
 import com.vnweather.app.util.LocaleHelper
@@ -46,10 +47,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.rowDiagnostics.setOnClickListener { runDiagnostics() }
     }
 
-    /**
-     * Switching model invalidates nothing by hand: the cache is keyed per
-     * model, so the main screen simply misses its cache and refetches.
-     */
     private fun setupModel() {
         binding.radioModelEcmwf.isChecked = settings.weatherModel == SettingsStore.MODEL_ECMWF
         binding.radioModelGfs.isChecked = settings.weatherModel == SettingsStore.MODEL_GFS
@@ -59,6 +56,8 @@ class SettingsActivity : AppCompatActivity() {
             } else {
                 SettingsStore.MODEL_ECMWF
             }
+            // The cache is keyed per model, so the next load refetches instead
+            // of showing the other model's numbers.
         }
     }
 
@@ -100,6 +99,10 @@ class SettingsActivity : AppCompatActivity() {
                 else -> LocaleHelper.LANG_SYSTEM
             }
             LocaleHelper.applyLanguage(tag)
+            // The widget cannot read AppCompat's locale on API < 33, so keep a
+            // copy it can read, then redraw it in the new language.
+            settings.languageTag = tag
+            WeatherWidgetProvider.refreshAll(this)
         }
     }
 

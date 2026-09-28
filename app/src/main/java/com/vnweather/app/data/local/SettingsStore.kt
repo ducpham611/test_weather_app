@@ -9,14 +9,6 @@ class SettingsStore(context: Context) {
     private val prefs = context.applicationContext
         .getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-    /**
-     * Which Open-Meteo weather model to query.
-     * Both supported models provide hourly steps and rain probability.
-     */
-    var weatherModel: String
-        get() = prefs.getString(KEY_MODEL, MODEL_ECMWF) ?: MODEL_ECMWF
-        set(value) = prefs.edit().putString(KEY_MODEL, value).apply()
-
     /** "celsius" or "fahrenheit" */
     var temperatureUnit: String
         get() = prefs.getString(KEY_TEMP_UNIT, UNIT_CELSIUS) ?: UNIT_CELSIUS
@@ -42,32 +34,43 @@ class SettingsStore(context: Context) {
         get() = prefs.getInt(KEY_DAILY_DAYS, DEFAULT_DAILY_DAYS)
         set(value) = prefs.edit().putInt(KEY_DAILY_DAYS, value).apply()
 
+    /** Forecast model id sent to Open-Meteo. */
+    var weatherModel: String
+        get() = prefs.getString(KEY_MODEL, MODEL_ECMWF) ?: MODEL_ECMWF
+        set(value) = prefs.edit().putString(KEY_MODEL, value).apply()
+
+    /** Language tag the widget reads; the widget has no AppCompat context. */
+    var languageTag: String
+        get() = prefs.getString(KEY_LANGUAGE, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LANGUAGE, value).apply()
+
     var nightMode: Int
         get() = prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         set(value) = prefs.edit().putInt(KEY_NIGHT_MODE, value).apply()
 
     companion object {
-        /** ECMWF IFS HRES, 9 km, native hourly to 90 h. */
-        const val MODEL_ECMWF = "ecmwf_ifs"
-
-        /** NOAA GFS, ~11 km, native hourly to 120 h. */
-        const val MODEL_GFS = "gfs_seamless"
-
         const val UNIT_CELSIUS = "celsius"
         const val UNIT_FAHRENHEIT = "fahrenheit"
         const val UNIT_KMH = "kmh"
         const val UNIT_MS = "ms"
 
+        /** ECMWF IFS HRES: 9 km, the default and the better model for Vietnam. */
+        const val MODEL_ECMWF = "ecmwf_ifs"
+
+        /** NOAA GFS: ~11 km, hourly out to 120 h, no gaps at the end of the run. */
+        const val MODEL_GFS = "gfs_seamless"
+
         /** 3 days by default, matching the main screen's short forecast. */
         const val DEFAULT_DAILY_DAYS = 3
         const val EXTENDED_DAILY_DAYS = 7
 
-        private const val KEY_MODEL = "weather_model"
         private const val KEY_TEMP_UNIT = "temperature_unit"
         private const val KEY_WIND_UNIT = "wind_unit"
         private const val KEY_REFRESH_MIN = "refresh_minutes"
         private const val KEY_BG_REFRESH_H = "background_refresh_hours"
         private const val KEY_DAILY_DAYS = "daily_days_shown"
         private const val KEY_NIGHT_MODE = "night_mode"
+        private const val KEY_MODEL = "weather_model"
+        private const val KEY_LANGUAGE = "language_tag"
     }
 }

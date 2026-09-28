@@ -21,7 +21,6 @@
     <string name="weather_icon">Weather icon</string>
     <string name="retry">Try again</string>
     <string name="attribution">Weather data: Open-Meteo.com (ECMWF IFS HRES) · CC BY 4.0</string>
-    <string name="attribution_gfs">Weather data: Open-Meteo.com (NOAA GFS) · CC BY 4.0</string>
 
     <!-- Search -->
     <string name="search_title">Search place</string>
@@ -55,10 +54,6 @@
 
     <!-- Settings -->
     <string name="settings">Settings</string>
-    <string name="weather_model">Weather model</string>
-    <string name="model_ecmwf">ECMWF IFS HRES — 9 km (recommended)</string>
-    <string name="model_gfs">NOAA GFS — 11 km</string>
-    <string name="model_note">Both give hourly steps and rain chance. ECMWF has the finer grid; switching reloads the forecast.</string>
     <string name="temperature_unit">Temperature unit</string>
     <string name="unit_celsius">°C</string>
     <string name="unit_fahrenheit">°F</string>
@@ -114,4 +109,9 @@
     <string name="wmo_thunderstorm_heavy">Heavy thunderstorm</string>
     <string name="wmo_thunderstorm_hail">Thunderstorm with hail</string>
     <string name="wmo_unknown">Unknown</string>
+    <string name="weather_model">Weather model</string>
+    <string name="model_ecmwf">ECMWF IFS HRES (recommended)</string>
+    <string name="model_gfs">NOAA GFS</string>
+    <string name="model_note">ECMWF is a 9 km European model and is usually the most accurate for Vietnam. NOAA GFS is ~11 km with hourly data further ahead. Switching reloads the forecast.</string>
+    <string name="attribution_gfs">Weather data: Open-Meteo.com (NOAA GFS) · CC BY 4.0</string>
 </resources>

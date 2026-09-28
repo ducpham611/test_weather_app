@@ -1,5 +1,7 @@
 package com.vnweather.app.util
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
@@ -37,6 +39,26 @@ object LocaleHelper {
             tag.startsWith(LANG_ENGLISH) -> Locale.ENGLISH
             else -> Locale.getDefault()
         }
+    }
+
+    /** Resolve an explicit tag; used by the widget, which has no AppCompat. */
+    fun localeFor(tag: String): Locale = when {
+        tag.startsWith(LANG_VIETNAMESE) -> VIETNAM
+        tag.startsWith(LANG_ENGLISH) -> Locale.ENGLISH
+        else -> Locale.getDefault()
+    }
+
+    /**
+     * A Context whose resources resolve in [locale].
+     *
+     * The home screen widget is drawn from a BroadcastReceiver through
+     * RemoteViews, which never goes through AppCompat, so it would otherwise
+     * pick up the system language and ignore the in-app choice.
+     */
+    fun localizedContext(context: Context, locale: Locale): Context {
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        return context.createConfigurationContext(config)
     }
 
     fun geocodingLanguage(): String =

@@ -18,7 +18,7 @@ class ForecastCache(context: Context) {
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
     fun read(cityId: String, modelId: String): Forecast? {
-        val file = fileFor("$cityId-$modelId")
+        val file = fileFor(cityId, modelId)
         if (!file.exists()) return null
         return runCatching { json.decodeFromString(Forecast.serializer(), file.readText()) }
             .getOrNull()
@@ -27,7 +27,7 @@ class ForecastCache(context: Context) {
 
     fun write(forecast: Forecast, modelId: String) {
         runCatching {
-            fileFor("${forecast.city.id}-$modelId")
+            fileFor(forecast.city.id, modelId)
                 .writeText(json.encodeToString(Forecast.serializer(), forecast))
         }
     }
@@ -36,7 +36,10 @@ class ForecastCache(context: Context) {
         dir.listFiles()?.forEach { it.delete() }
     }
 
-    private fun fileFor(cityId: String) = File(dir, "${sanitize(cityId)}.json")
+    // Keyed by model as well as city: switching models must refetch instead of
+    // showing the other model's numbers.
+    private fun fileFor(cityId: String, modelId: String) =
+        File(dir, "${sanitize(cityId)}-${sanitize(modelId)}.json")
 
     private fun sanitize(id: String) = id.replace(Regex("[^A-Za-z0-9._-]"), "_")
 

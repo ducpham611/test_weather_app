@@ -8,6 +8,7 @@ import com.vnweather.app.data.local.ForecastCache
 import com.vnweather.app.data.local.SavedCitiesStore
 import com.vnweather.app.data.local.SettingsStore
 import com.vnweather.app.ui.widget.WidgetRefreshScheduler
+import com.vnweather.app.util.LocaleHelper
 import com.vnweather.app.util.NetworkModule
 import org.conscrypt.Conscrypt
 import java.security.Security
@@ -45,6 +46,11 @@ class WeatherApp : Application() {
             cache = ForecastCache(this),
             settings = settings
         )
+
+        // Mirror the in-app language into SettingsStore so the widget, which
+        // is drawn outside AppCompat, can read it.
+        val tag = LocaleHelper.currentLanguageTag()
+        if (tag.isNotBlank()) settings.languageTag = tag
 
         AppCompatDelegate.setDefaultNightMode(settings.nightMode)
         WidgetRefreshScheduler.schedule(this, settings.backgroundRefreshHours)

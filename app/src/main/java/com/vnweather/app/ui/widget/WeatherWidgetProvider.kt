@@ -3,6 +3,7 @@ package com.vnweather.app.ui.widget
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -35,10 +36,16 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         val forecast = app.repository.getCached(city)
         val views = RemoteViews(context.packageName, R.layout.widget_weather)
 
+        // Follow the language chosen in the app, not the system language.
+        // SettingsStore holds the tag because AppCompatDelegate is not
+        // reliable from a receiver on API < 33.
+        val locale = LocaleHelper.localeFor(app.settings.languageTag)
+        val local = LocaleHelper.localizedContext(context, locale)
+
         if (forecast == null) {
             views.setTextViewText(R.id.widgetCity, city.name)
             views.setTextViewText(R.id.widgetTemp, "--\u00B0")
-            views.setTextViewText(R.id.widgetCondition, context.getString(R.string.widget_no_data))
+            views.setTextViewText(R.id.widgetCondition, local.getString(R.string.widget_no_data))
         } else {
             val current = forecast.current
             views.setTextViewText(R.id.widgetCity, forecast.city.name)
@@ -48,7 +55,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             )
             views.setTextViewText(
                 R.id.widgetCondition,
-                context.getString(WeatherCodeMapper.descriptionRes(current.weatherCode))
+                local.getString(WeatherCodeMapper.descriptionRes(current.weatherCode))
             )
             views.setImageViewResource(
                 R.id.widgetIcon,
@@ -56,7 +63,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             )
             views.setTextViewText(
                 R.id.widgetUpdated,
-                Formatters.clockLabel(forecast.fetchedAtMillis, LocaleHelper.currentLocale())
+                Formatters.clockLabel(forecast.fetchedAtMillis, locale)
             )
         }
 
@@ -71,5 +78,22 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.widgetRoot, pendingIntent)
 
         manager.updateAppWidget(widgetId, views)
+    }
+
+    companion object {
+        /** Redraw every placed widget, e.g. after the language is changed. */
+        fun refreshAll(context: Context) {
+            val manager = AppWidgetManager.getInstance(context)
+            val ids = manager.getAppWidgetIds(
+                ComponentName(context, WeatherWidgetProvider::class.java)
+            )
+            if (ids.isEmpty()) return
+            context.sendBroadcast(
+                Intent(context, WeatherWidgetProvider::class.java).apply {
+                    action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+                }
+            )
+        }
     }
 }

@@ -132,9 +132,8 @@ class MainActivity : AppCompatActivity() {
         binding.buttonRetry.setOnClickListener { viewModel.load(forceRefresh = true) }
         binding.buttonShowMore.setOnClickListener {
             viewModel.toggleShowAllDays()
-            // Re-bind straight away instead of waiting for a LiveData
-            // round trip, so one tap always redraws the list.
-            renderCurrentState()
+            // Re-render straight away rather than waiting for an observer.
+            (viewModel.state.value as? UiState.Success)?.let { render(it) }
         }
         binding.headerCity.setOnClickListener { openSearch() }
 
@@ -153,11 +152,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun observe() {
         viewModel.state.observe(this) { state -> render(state) }
-    }
-
-    /** Re-draws from whatever state is already loaded. */
-    private fun renderCurrentState() {
-        viewModel.state.value?.let { render(it) }
     }
 
     private fun render(state: UiState) {
@@ -229,22 +223,24 @@ class MainActivity : AppCompatActivity() {
             binding.recyclerHourly.requestLayout()
         }
 
-        // Daily: 3 days by default, all available days when expanded.
+        // Daily: 3 days by default, every day the model returns when expanded.
+        // The list is wrap_content with nested scrolling off, so all 7 rows
+        // render inline inside the page scroll - no inner scrollbar.
         val visibleDays = viewModel.visibleDays(forecast).coerceAtMost(forecast.daily.size)
         dailyAdapter.temperatureUnit = tempUnit
-        dailyAdapter.submitList(forecast.daily.take(visibleDays))
-
-        val expanded = viewModel.isShowingAllDays
-        binding.buttonShowMore.apply {
-            visibility =
-                if (forecast.daily.size > visibleDays || expanded) View.VISIBLE else View.GONE
-            setText(if (expanded) R.string.show_less else R.string.show_more)
+        dailyAdapter.submitList(forecast.daily.take(visibleDays)) {
+            binding.recyclerDaily.requestLayout()
         }
 
-        // Keep the credit honest about which model produced this data.
         binding.textAttribution.setText(
             if (viewModel.isUsingGfs) R.string.attribution_gfs else R.string.attribution
         )
+
+        val expanded = viewModel.isShowingAllDays
+        binding.buttonShowMore.apply {
+            visibility = if (forecast.daily.size > visibleDays || expanded) View.VISIBLE else View.GONE
+            setText(if (expanded) R.string.show_less else R.string.show_more)
+        }
     }
 
     /** Drop hours already in the past, then take the next [count]. */

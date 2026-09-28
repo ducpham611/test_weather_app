@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Fully transparent: the widget sits on the user's wallpaper, so it shows
+     through. Text carries a shadow so it stays readable on light wallpapers. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners android:radius="16dp" />
-    <solid android:color="#E01565C0" />
+    <solid android:color="@android:color/transparent" />
 </shape>

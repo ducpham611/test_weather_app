@@ -83,16 +83,6 @@ class WeatherRepository(
                 Result.failure(e)
             }
         }
-
-    /** Reverse lookup so a GPS fix gets a readable Vietnamese place name. */
-    suspend fun describeCoordinates(
-        latitude: Double,
-        longitude: Double,
-        language: String,
-        fallbackLabel: String
-    ): City = withContext(Dispatchers.IO) {
-        City.fromLocation(latitude, longitude, fallbackLabel)
-    }
 }
 
 /**
