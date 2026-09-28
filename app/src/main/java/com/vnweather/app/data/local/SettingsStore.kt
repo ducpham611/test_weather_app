@@ -46,7 +46,7 @@ class SettingsStore(context: Context) {
 
         /** 3 days by default, matching the main screen's short forecast. */
         const val DEFAULT_DAILY_DAYS = 3
-        const val EXTENDED_DAILY_DAYS = 15
+        const val EXTENDED_DAILY_DAYS = 7
 
         private const val KEY_TEMP_UNIT = "temperature_unit"
         private const val KEY_WIND_UNIT = "wind_unit"

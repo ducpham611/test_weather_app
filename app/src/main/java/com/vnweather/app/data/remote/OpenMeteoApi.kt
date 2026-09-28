@@ -6,7 +6,8 @@ import retrofit2.http.Query
 /**
  * Open-Meteo forecast API, pinned to the ECMWF IFS HRES model.
  *
- * HRES is a global 9 km model, updated every 6 hours, out to 15 days.
+ * HRES is a global 9 km model, updated every 6 hours. We request 7 days,
+ * which stays well inside the run's horizon and keeps the payload small.
  * Hourly steps are native for the first 90 hours, which covers the whole
  * 3-day hourly view at full resolution.
  *
@@ -24,7 +25,7 @@ interface OpenMeteoApi {
         @Query("hourly") hourly: String = HOURLY_FIELDS,
         @Query("daily") daily: String = DAILY_FIELDS,
         @Query("timezone") timezone: String = "auto",
-        @Query("forecast_days") forecastDays: Int = 15,
+        @Query("forecast_days") forecastDays: Int = 7,
         @Query("temperature_unit") temperatureUnit: String = "celsius",
         @Query("wind_speed_unit") windSpeedUnit: String = "kmh",
         @Query("precipitation_unit") precipitationUnit: String = "mm"

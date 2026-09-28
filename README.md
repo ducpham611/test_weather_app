@@ -43,7 +43,7 @@ See **[BUILD_APK.md](BUILD_APK.md)** for the full walkthrough.
 - **Current weather** — temperature, feels-like, condition, humidity, wind, rain.
 - **24-hour hourly forecast** — well inside IFS HRES's native 90-hour hourly window,
   so every cell is real model output rather than interpolation.
-- **Upcoming days forecast** — 3 days by default, expandable to 15 with **"Xem thêm ngày"**.
+- **Upcoming days forecast** — 7 days from the API, 3 shown by default and the rest behind **"Xem thêm ngày"**.
 - **Responsive to the system font size** — the detail row stacks vertically above ~1.15x
   scaling, and every row uses flexible widths so nothing wraps or overlaps.
 - **Place picker** — search any city or district through Open-Meteo geocoding with
@@ -84,7 +84,7 @@ https://api.open-meteo.com/v1/forecast
           wind_speed_10m,is_day
   &daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,
          precipitation_probability_max,sunrise,sunset
-  &timezone=auto&forecast_days=15
+  &timezone=auto&forecast_days=7
 ```
 
 Geocoding: `https://geocoding-api.open-meteo.com/v1/search?name={q}&count=20&language=vi`

@@ -32,27 +32,36 @@ data class CurrentDto(
     @SerialName("is_day") val isDay: Int = 1
 )
 
+/**
+ * Every element is nullable on purpose.
+ *
+ * Open-Meteo pads the arrays out to the requested number of steps and fills
+ * the tail with `null` when the model run does not reach that far. With
+ * non-nullable element types the whole response fails to parse and the app
+ * shows a generic error, even though 14 of 15 days arrived perfectly.
+ */
 @Serializable
 data class HourlyDto(
     val time: List<String> = emptyList(),
-    @SerialName("temperature_2m") val temperature: List<Double> = emptyList(),
+    @SerialName("temperature_2m") val temperature: List<Double?> = emptyList(),
     @SerialName("precipitation_probability") val precipitationProbability: List<Int?> = emptyList(),
-    val precipitation: List<Double> = emptyList(),
-    @SerialName("weather_code") val weatherCode: List<Int> = emptyList(),
-    @SerialName("wind_speed_10m") val windSpeed: List<Double> = emptyList(),
-    @SerialName("is_day") val isDay: List<Int> = emptyList()
+    val precipitation: List<Double?> = emptyList(),
+    @SerialName("weather_code") val weatherCode: List<Int?> = emptyList(),
+    @SerialName("wind_speed_10m") val windSpeed: List<Double?> = emptyList(),
+    @SerialName("is_day") val isDay: List<Int?> = emptyList()
 )
 
+/** Same nullability rule as [HourlyDto]; the final day is often all null. */
 @Serializable
 data class DailyDto(
     val time: List<String> = emptyList(),
-    @SerialName("weather_code") val weatherCode: List<Int> = emptyList(),
-    @SerialName("temperature_2m_max") val tempMax: List<Double> = emptyList(),
-    @SerialName("temperature_2m_min") val tempMin: List<Double> = emptyList(),
-    @SerialName("precipitation_sum") val precipitationSum: List<Double> = emptyList(),
+    @SerialName("weather_code") val weatherCode: List<Int?> = emptyList(),
+    @SerialName("temperature_2m_max") val tempMax: List<Double?> = emptyList(),
+    @SerialName("temperature_2m_min") val tempMin: List<Double?> = emptyList(),
+    @SerialName("precipitation_sum") val precipitationSum: List<Double?> = emptyList(),
     @SerialName("precipitation_probability_max") val precipitationProbabilityMax: List<Int?> = emptyList(),
-    val sunrise: List<String> = emptyList(),
-    val sunset: List<String> = emptyList()
+    val sunrise: List<String?> = emptyList(),
+    val sunset: List<String?> = emptyList()
 )
 
 @Serializable

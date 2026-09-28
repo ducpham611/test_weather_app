@@ -1,6 +1,7 @@
 package com.vnweather.app.util
 
 import com.vnweather.app.domain.ErrorType
+import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
@@ -21,6 +22,9 @@ object AppError {
         is SSLException -> ErrorType.TLS_ERROR
         is SocketTimeoutException -> ErrorType.TIMEOUT
         is HttpException -> ErrorType.API_ERROR
+        // A response we cannot parse is a server-side/format problem, not a
+        // mystery. Reporting it as "something went wrong" hides the cause.
+        is SerializationException -> ErrorType.API_ERROR
         is IOException -> ErrorType.NO_NETWORK
         else -> ErrorType.UNKNOWN
     }

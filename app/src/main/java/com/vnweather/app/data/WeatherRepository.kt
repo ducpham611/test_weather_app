@@ -111,27 +111,33 @@ internal fun ForecastResponse.toDomain(city: City, fetchedAtMillis: Long): Forec
         isDay = (c?.isDay ?: 1) == 1
     )
 
+    // Steps beyond the model's horizon come back as nulls; drop them rather
+    // than rendering a row of dashes.
     val h = hourly
-    val hourlyItems = if (h == null) emptyList() else h.time.indices.map { i ->
+    val hourlyItems = if (h == null) emptyList() else h.time.indices.mapNotNull { i ->
+        val temp = h.temperature.getOrNull(i) ?: return@mapNotNull null
         HourlyItem(
             timeIso = h.time[i],
-            temperature = h.temperature.getOrElse(i) { 0.0 },
+            temperature = temp,
             precipitationProbability = h.precipitationProbability.getOrNull(i),
-            precipitation = h.precipitation.getOrElse(i) { 0.0 },
-            weatherCode = h.weatherCode.getOrElse(i) { 0 },
-            windSpeed = h.windSpeed.getOrElse(i) { 0.0 },
-            isDay = h.isDay.getOrElse(i) { 1 } == 1
+            precipitation = h.precipitation.getOrNull(i) ?: 0.0,
+            weatherCode = h.weatherCode.getOrNull(i) ?: 0,
+            windSpeed = h.windSpeed.getOrNull(i) ?: 0.0,
+            isDay = (h.isDay.getOrNull(i) ?: 1) == 1
         )
     }
 
+    // The last requested day is routinely null for ECMWF IFS: skip it.
     val d = daily
-    val dailyItems = if (d == null) emptyList() else d.time.indices.map { i ->
+    val dailyItems = if (d == null) emptyList() else d.time.indices.mapNotNull { i ->
+        val max = d.tempMax.getOrNull(i) ?: return@mapNotNull null
+        val min = d.tempMin.getOrNull(i) ?: return@mapNotNull null
         DailyItem(
             dateIso = d.time[i],
-            weatherCode = d.weatherCode.getOrElse(i) { 0 },
-            tempMax = d.tempMax.getOrElse(i) { 0.0 },
-            tempMin = d.tempMin.getOrElse(i) { 0.0 },
-            precipitationSum = d.precipitationSum.getOrElse(i) { 0.0 },
+            weatherCode = d.weatherCode.getOrNull(i) ?: 0,
+            tempMax = max,
+            tempMin = min,
+            precipitationSum = d.precipitationSum.getOrNull(i) ?: 0.0,
             precipitationProbabilityMax = d.precipitationProbabilityMax.getOrNull(i),
             sunriseIso = d.sunrise.getOrNull(i),
             sunsetIso = d.sunset.getOrNull(i)

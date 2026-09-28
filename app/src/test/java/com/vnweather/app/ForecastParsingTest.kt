@@ -70,6 +70,46 @@ class ForecastParsingTest {
         assertEquals("2026-09-29", forecast.daily[2].dateIso)
     }
 
+    /**
+     * Regression test. Open-Meteo pads the daily arrays to the requested
+     * number of days and fills the tail with nulls once the model run ends.
+     * This used to throw and surface as "Something went wrong".
+     */
+    @Test
+    fun `null padded days are parsed and skipped`() {
+        val padded = """
+        {
+          "timezone": "Asia/Bangkok",
+          "daily": {
+            "time": ["2026-09-28", "2026-09-29", "2026-10-12"],
+            "weather_code": [53, 3, null],
+            "temperature_2m_max": [33.6, 33.9, null],
+            "temperature_2m_min": [26.4, 26.7, null],
+            "precipitation_sum": [1.5, 0.0, null],
+            "precipitation_probability_max": [49, 12, null],
+            "sunrise": ["2026-09-28T05:46", "2026-09-29T05:46", "2026-10-12T05:50"],
+            "sunset": ["2026-09-28T17:47", "2026-09-29T17:46", "2026-10-12T17:34"]
+          },
+          "hourly": {
+            "time": ["2026-09-28T00:00", "2026-09-28T01:00"],
+            "temperature_2m": [27.1, null],
+            "precipitation_probability": [0, null],
+            "precipitation": [0.0, null],
+            "weather_code": [0, null],
+            "wind_speed_10m": [12.0, null],
+            "is_day": [0, null]
+          }
+        }
+        """.trimIndent()
+
+        val dto = json.decodeFromString(ForecastResponse.serializer(), padded)
+        val forecast = dto.toDomain(City.HANOI, fetchedAtMillis = 0L)
+
+        assertEquals(2, forecast.daily.size)
+        assertEquals("2026-09-29", forecast.daily[1].dateIso)
+        assertEquals(1, forecast.hourly.size)
+    }
+
     @Test
     fun `missing blocks do not crash the mapper`() {
         val dto = json.decodeFromString(ForecastResponse.serializer(), """{"timezone":"auto"}""")
