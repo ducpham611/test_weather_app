@@ -31,7 +31,8 @@ class WeatherRepository(
         forceRefresh: Boolean = false,
         nowMillis: Long = System.currentTimeMillis()
     ): Result<Forecast> = withContext(Dispatchers.IO) {
-        val cached = cache.read(city.id)
+        val model = settings.weatherModel
+        val cached = cache.read(city.id, model)
 
         if (!forceRefresh && cached != null &&
             ForecastCache.isFresh(cached.fetchedAtMillis, settings.refreshMinutes, nowMillis)
@@ -43,11 +44,12 @@ class WeatherRepository(
             val response = api.getForecast(
                 latitude = city.latitude,
                 longitude = city.longitude,
+                models = model,
                 temperatureUnit = settings.temperatureUnit,
                 windSpeedUnit = settings.windUnit
             )
             val forecast = response.toDomain(city, nowMillis)
-            cache.write(forecast)
+            cache.write(forecast, model)
             Result.success(forecast)
         } catch (e: Exception) {
             // Always propagate the real error. The ViewModel decides whether to
@@ -58,7 +60,7 @@ class WeatherRepository(
     }
 
     /** Cached data only; used by the widget and by the offline path. */
-    fun getCached(city: City): Forecast? = cache.read(city.id)
+    fun getCached(city: City): Forecast? = cache.read(city.id, settings.weatherModel)
 
     suspend fun searchCities(query: String, language: String): Result<List<City>> =
         withContext(Dispatchers.IO) {

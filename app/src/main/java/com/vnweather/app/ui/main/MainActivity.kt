@@ -130,7 +130,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupActions() {
         binding.swipeRefresh.setOnRefreshListener { viewModel.load(forceRefresh = true) }
         binding.buttonRetry.setOnClickListener { viewModel.load(forceRefresh = true) }
-        binding.buttonShowMore.setOnClickListener { viewModel.toggleShowAllDays() }
+        binding.buttonShowMore.setOnClickListener {
+            viewModel.toggleShowAllDays()
+            // Re-bind straight away instead of waiting for a LiveData
+            // round trip, so one tap always redraws the list.
+            renderCurrentState()
+        }
         binding.headerCity.setOnClickListener { openSearch() }
 
         // Long-press the timestamp to see the raw failure. Invaluable when the
@@ -148,9 +153,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun observe() {
         viewModel.state.observe(this) { state -> render(state) }
-        viewModel.showAllDays.observe(this) {
-            (viewModel.state.value as? UiState.Success)?.let { render(it) }
-        }
+    }
+
+    /** Re-draws from whatever state is already loaded. */
+    private fun renderCurrentState() {
+        viewModel.state.value?.let { render(it) }
     }
 
     private fun render(state: UiState) {
@@ -227,11 +234,17 @@ class MainActivity : AppCompatActivity() {
         dailyAdapter.temperatureUnit = tempUnit
         dailyAdapter.submitList(forecast.daily.take(visibleDays))
 
-        val expanded = viewModel.showAllDays.value == true
+        val expanded = viewModel.isShowingAllDays
         binding.buttonShowMore.apply {
-            visibility = if (forecast.daily.size > visibleDays || expanded) View.VISIBLE else View.GONE
+            visibility =
+                if (forecast.daily.size > visibleDays || expanded) View.VISIBLE else View.GONE
             setText(if (expanded) R.string.show_less else R.string.show_more)
         }
+
+        // Keep the credit honest about which model produced this data.
+        binding.textAttribution.setText(
+            if (viewModel.isUsingGfs) R.string.attribution_gfs else R.string.attribution
+        )
     }
 
     /** Drop hours already in the past, then take the next [count]. */

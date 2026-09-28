@@ -32,6 +32,7 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.settings)
 
+        setupModel()
         setupTemperature()
         setupWind()
         setupLanguage()
@@ -43,6 +44,22 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.rowDiagnostics.setOnClickListener { runDiagnostics() }
+    }
+
+    /**
+     * Switching model invalidates nothing by hand: the cache is keyed per
+     * model, so the main screen simply misses its cache and refetches.
+     */
+    private fun setupModel() {
+        binding.radioModelEcmwf.isChecked = settings.weatherModel == SettingsStore.MODEL_ECMWF
+        binding.radioModelGfs.isChecked = settings.weatherModel == SettingsStore.MODEL_GFS
+        binding.groupModel.setOnCheckedChangeListener { _, id ->
+            settings.weatherModel = if (id == R.id.radioModelGfs) {
+                SettingsStore.MODEL_GFS
+            } else {
+                SettingsStore.MODEL_ECMWF
+            }
+        }
     }
 
     private fun setupTemperature() {

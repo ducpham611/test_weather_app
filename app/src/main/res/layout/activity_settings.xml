@@ -20,6 +20,23 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <TextView style="@style/SettingsHeader" android:text="@string/weather_model" />
+            <RadioGroup
+                android:id="@+id/groupModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioButton android:id="@+id/radioModelEcmwf" style="@style/SettingsRadio" android:text="@string/model_ecmwf" />
+                <RadioButton android:id="@+id/radioModelGfs" style="@style/SettingsRadio" android:text="@string/model_gfs" />
+            </RadioGroup>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:text="@string/model_note" />
+
             <TextView style="@style/SettingsHeader" android:text="@string/temperature_unit" />
             <RadioGroup
                 android:id="@+id/groupTemperature"

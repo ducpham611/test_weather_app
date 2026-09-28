@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
+import com.vnweather.app.data.local.SettingsStore
 import com.vnweather.app.domain.City
 import com.vnweather.app.domain.Forecast
 import com.vnweather.app.domain.UiState
@@ -85,8 +86,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         load(forceRefresh = true)
     }
 
+    /** Read synchronously so the UI never depends on LiveData delivery order. */
+    var isShowingAllDays: Boolean = false
+        private set
+
     fun toggleShowAllDays() {
-        _showAllDays.value = !(_showAllDays.value ?: false)
+        isShowingAllDays = !isShowingAllDays
+        _showAllDays.value = isShowingAllDays
     }
 
     /**
@@ -94,7 +100,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * taps "Xem thêm".
      */
     fun visibleDays(forecast: Forecast): Int =
-        if (_showAllDays.value == true) forecast.daily.size else settings.dailyDaysShown
+        if (isShowingAllDays) forecast.daily.size else settings.dailyDaysShown
+
+    val isUsingGfs: Boolean
+        get() = settings.weatherModel == SettingsStore.MODEL_GFS
 
     val temperatureUnit: String get() = settings.temperatureUnit
     val windUnit: String get() = settings.windUnit

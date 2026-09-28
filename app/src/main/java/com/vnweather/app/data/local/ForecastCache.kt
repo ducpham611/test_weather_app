@@ -17,17 +17,17 @@ class ForecastCache(context: Context) {
     private val dir = File(context.applicationContext.cacheDir, "forecasts").apply { mkdirs() }
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
-    fun read(cityId: String): Forecast? {
-        val file = fileFor(cityId)
+    fun read(cityId: String, modelId: String): Forecast? {
+        val file = fileFor("$cityId-$modelId")
         if (!file.exists()) return null
         return runCatching { json.decodeFromString(Forecast.serializer(), file.readText()) }
             .getOrNull()
             ?.copy(fromCache = true)
     }
 
-    fun write(forecast: Forecast) {
+    fun write(forecast: Forecast, modelId: String) {
         runCatching {
-            fileFor(forecast.city.id)
+            fileFor("${forecast.city.id}-$modelId")
                 .writeText(json.encodeToString(Forecast.serializer(), forecast))
         }
     }
