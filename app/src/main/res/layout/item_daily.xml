@@ -4,15 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
     android:paddingStart="4dp"
     android:paddingEnd="4dp">
 
     <ImageView
         android:id="@+id/imageIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:contentDescription="@string/weather_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toTopOf="@id/imageIcon"
         app:layout_constraintStart_toEndOf="@id/imageIcon"
-        app:layout_constraintEnd_toStartOf="@id/textTempMin" />
+        app:layout_constraintEnd_toStartOf="@id/textRain" />
 
     <TextView
         android:id="@+id/textCondition"
@@ -48,18 +48,21 @@
         app:layout_constraintStart_toEndOf="@id/imageIcon"
         app:layout_constraintEnd_toStartOf="@id/textRain" />
 
+    <!-- Rain chance: blue droplet above the percentage -->
     <TextView
         android:id="@+id/textRain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:drawableStart="@drawable/ic_humidity"
-        android:drawablePadding="3dp"
-        android:gravity="center_vertical"
+        android:layout_marginEnd="10dp"
+        android:minWidth="36dp"
+        android:gravity="center"
         android:maxLines="1"
+        android:drawableTop="@drawable/ic_drop_filled"
+        android:drawablePadding="1dp"
         android:textSize="12sp"
         android:textColor="@color/rain_blue"
-        app:layout_constraintTop_toTopOf="@id/textCondition"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/textTempMin" />
 
     <TextView

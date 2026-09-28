@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -31,73 +30,29 @@
             android:fillViewport="true"
             android:scrollbars="none">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="24dp">
-
-                <!-- Header: tap to change city / district -->
-                <LinearLayout
-                    android:id="@+id/headerCity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <TextView
-                        android:id="@+id/textCityName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="?android:attr/textColorPrimary" />
-
-                    <TextView
-                        android:id="@+id/textCitySubtitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:textSize="13sp"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
 
                 <ProgressBar
                     android:id="@+id/progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="48dp"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/headerCity"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:visibility="gone" />
 
                 <!-- Error state -->
                 <LinearLayout
                     android:id="@+id/errorGroup"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:padding="24dp"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/headerCity"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/textError"
@@ -119,32 +74,73 @@
                 <!-- Main content -->
                 <LinearLayout
                     android:id="@+id/contentGroup"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/headerCity"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    android:visibility="gone">
 
-                    <!-- Current weather -->
+                    <!-- Current weather: white rounded card -->
                     <LinearLayout
+                        android:id="@+id/currentCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="16dp">
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_card_surface"
+                        android:elevation="2dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="20dp">
+
+                        <LinearLayout
+                            android:id="@+id/headerCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp">
+
+                            <TextView
+                                android:id="@+id/textCityName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:textSize="22sp"
+                                android:textColor="?android:attr/textColorPrimary" />
+
+                            <TextView
+                                android:id="@+id/textCitySubtitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="16dp"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:textSize="13sp"
+                                android:textColor="?android:attr/textColorSecondary" />
+                        </LinearLayout>
 
                         <ImageView
                             android:id="@+id/imageCurrentIcon"
                             android:layout_width="96dp"
                             android:layout_height="96dp"
+                            android:layout_marginTop="8dp"
                             android:contentDescription="@string/weather_icon" />
 
                         <TextView
                             android:id="@+id/textTemperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:maxLines="1"
                             android:textSize="56sp"
                             android:textColor="?android:attr/textColorPrimary" />
@@ -153,6 +149,7 @@
                             android:id="@+id/textCondition"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:gravity="center_horizontal"
                             android:paddingStart="24dp"
                             android:paddingEnd="24dp"
@@ -161,56 +158,67 @@
 
                         <TextView
                             android:id="@+id/textFeelsLike"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
+                            android:gravity="center_horizontal"
                             android:textSize="13sp"
                             android:textColor="?android:attr/textColorSecondary" />
 
                         <TextView
                             android:id="@+id/textUpdatedAt"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center_horizontal"
                             android:textSize="12sp"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
 
-                    <!-- Detail row -->
+                    <!-- Detail row: blue rounded card -->
                     <LinearLayout
                         android:id="@+id/detailRow"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:baselineAligned="false"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_card"
-                        android:padding="12dp">
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_card_blue"
+                        android:elevation="2dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp">
 
-                        <LinearLayout
-                            style="@style/DetailCell">
+                        <LinearLayout style="@style/DetailCell">
                             <TextView style="@style/DetailLabel" android:text="@string/humidity" />
                             <TextView
                                 android:id="@+id/textHumidity"
                                 style="@style/DetailValue"
-                                android:drawableStart="@drawable/ic_humidity"
-                                android:drawablePadding="4dp"
-                                android:gravity="center_vertical" />
+                                android:drawableStart="@drawable/ic_detail_humidity"
+                                android:drawablePadding="6dp" />
                         </LinearLayout>
 
                         <LinearLayout style="@style/DetailCell">
                             <TextView style="@style/DetailLabel" android:text="@string/wind" />
-                            <TextView android:id="@+id/textWind" style="@style/DetailValue" />
+                            <TextView
+                                android:id="@+id/textWind"
+                                style="@style/DetailValue"
+                                android:drawableStart="@drawable/ic_detail_wind"
+                                android:drawablePadding="6dp" />
                         </LinearLayout>
 
                         <LinearLayout style="@style/DetailCell">
                             <TextView style="@style/DetailLabel" android:text="@string/precipitation" />
-                            <TextView android:id="@+id/textPrecipitation" style="@style/DetailValue" />
+                            <TextView
+                                android:id="@+id/textPrecipitation"
+                                style="@style/DetailValue"
+                                android:drawableStart="@drawable/ic_detail_rain"
+                                android:drawablePadding="6dp" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Hourly, next 72 hours -->
+                    <!-- Hourly -->
                     <TextView
                         style="@style/SectionTitle"
                         android:text="@string/hourly_title" />
@@ -225,10 +233,47 @@
                         android:paddingEnd="12dp"
                         android:overScrollMode="never" />
 
-                    <!-- Daily, 3 days by default -->
-                    <TextView
-                        style="@style/SectionTitle"
-                        android:text="@string/daily_title" />
+                    <!-- Daily, with Min / Max column headers -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/daily_title" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="40dp"
+                            android:gravity="end"
+                            android:maxLines="1"
+                            android:textSize="13sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/temp_min" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="44dp"
+                            android:gravity="end"
+                            android:maxLines="1"
+                            android:textSize="13sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:text="@string/temp_max" />
+                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerDaily"
@@ -240,23 +285,30 @@
 
                     <Button
                         android:id="@+id/buttonShowMore"
-                        style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_pill"
+                        android:elevation="2dp"
+                        android:minHeight="44dp"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:textColor="@color/sky_blue"
                         android:text="@string/show_more" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:padding="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:textSize="11sp"
                         android:textColor="?android:attr/textColorSecondary"
                         android:text="@string/attribution" />
                 </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

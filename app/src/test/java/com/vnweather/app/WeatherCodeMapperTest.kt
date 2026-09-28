@@ -22,6 +22,15 @@ class WeatherCodeMapperTest {
     }
 
     @Test
+    fun `heavy thunderstorm code 97 is mapped`() {
+        assertEquals(R.string.wmo_thunderstorm_heavy, WeatherCodeMapper.descriptionRes(97))
+        assertEquals(
+            WeatherCodeMapper.iconRes(95, true),
+            WeatherCodeMapper.iconRes(97, true)
+        )
+    }
+
+    @Test
     fun `unknown codes fall back instead of crashing`() {
         assertEquals(R.string.wmo_unknown, WeatherCodeMapper.descriptionRes(1234))
     }

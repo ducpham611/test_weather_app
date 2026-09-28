@@ -7,6 +7,8 @@
     <string name="today">Hôm nay</string>
     <string name="hourly_title">24 giờ tới</string>
     <string name="daily_title">Dự báo những ngày tới</string>
+    <string name="temp_min">Thấp</string>
+    <string name="temp_max">Cao</string>
     <string name="show_more">Xem thêm ngày</string>
     <string name="show_less">Thu gọn</string>
     <string name="feels_like_format">Cảm giác như %1$s</string>
@@ -104,6 +106,7 @@
     <string name="wmo_showers_violent">Mưa rào rất to</string>
     <string name="wmo_snow_showers">Mưa tuyết</string>
     <string name="wmo_thunderstorm">Dông</string>
+    <string name="wmo_thunderstorm_heavy">Dông mạnh</string>
     <string name="wmo_thunderstorm_hail">Dông kèm mưa đá</string>
     <string name="wmo_unknown">Không xác định</string>
 </resources>

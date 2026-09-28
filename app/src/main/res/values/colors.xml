@@ -9,4 +9,11 @@
     <color name="sun_yellow">#FFFFC107</color>
     <color name="cloud_gray">#FF90A4AE</color>
     <color name="moon_gray">#FFB0BEC5</color>
+    <!-- New UI palette -->
+    <color name="screen_background">#FFEDF2F9</color>
+    <color name="card_surface">#FFFFFFFF</color>
+    <color name="card_blue">#FF2A74D4</color>
+    <color name="on_blue_primary">#FFFFFFFF</color>
+    <color name="on_blue_secondary">#CCFFFFFF</color>
+    <color name="pill_surface">#FFFFFFFF</color>
 </resources>

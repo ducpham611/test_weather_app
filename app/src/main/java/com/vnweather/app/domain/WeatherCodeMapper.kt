@@ -32,6 +32,9 @@ object WeatherCodeMapper {
         82 -> R.string.wmo_showers_violent
         85, 86 -> R.string.wmo_snow_showers
         95 -> R.string.wmo_thunderstorm
+        // ECMWF reports 97 for a heavy thunderstorm; it has no hail forecast,
+        // so 96 and 99 only arrive from models such as DWD ICON or UKMO.
+        97 -> R.string.wmo_thunderstorm_heavy
         96, 99 -> R.string.wmo_thunderstorm_hail
         else -> R.string.wmo_unknown
     }
@@ -46,7 +49,7 @@ object WeatherCodeMapper {
         61, 63, 65, 66, 67 -> R.drawable.ic_weather_rain
         71, 73, 75, 77, 85, 86 -> R.drawable.ic_weather_snow
         80, 81, 82 -> R.drawable.ic_weather_showers
-        95, 96, 99 -> R.drawable.ic_weather_thunder
+        95, 96, 97, 99 -> R.drawable.ic_weather_thunder
         else -> R.drawable.ic_weather_cloudy
     }
 

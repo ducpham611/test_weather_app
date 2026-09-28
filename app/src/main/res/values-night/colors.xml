@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="screen_background">#FF11151C</color>
+    <color name="card_surface">#FF1E2430</color>
+    <color name="card_blue">#FF1B4F96</color>
+    <color name="pill_surface">#FF1E2430</color>
+</resources>
