@@ -42,6 +42,7 @@ class WeatherApp : Application() {
         savedCities = SavedCitiesStore(this)
         repository = WeatherRepository(
             api = NetworkModule.openMeteoApi,
+            tomorrowApi = NetworkModule.tomorrowApi,
             geocodingApi = NetworkModule.geocodingApi,
             cache = ForecastCache(this),
             settings = settings

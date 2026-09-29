@@ -109,9 +109,16 @@
     <string name="wmo_thunderstorm_heavy">Heavy thunderstorm</string>
     <string name="wmo_thunderstorm_hail">Thunderstorm with hail</string>
     <string name="wmo_unknown">Unknown</string>
-    <string name="weather_model">Weather model</string>
+    <string name="weather_model">Weather data provider</string>
     <string name="model_ecmwf">ECMWF IFS HRES (recommended)</string>
     <string name="model_gfs">NOAA GFS</string>
-    <string name="model_note">ECMWF is a 9 km European model and is usually the most accurate for Vietnam. NOAA GFS is ~11 km with hourly data further ahead. Switching reloads the forecast.</string>
+    <string name="model_note">ECMWF is a 9 km European model and is usually the most accurate for Vietnam. NOAA GFS is ~11 km with hourly data further ahead. Tomorrow.io needs an API key and only returns 5 daily days. Switching reloads the forecast.</string>
     <string name="attribution_gfs">Weather data: Open-Meteo.com (NOAA GFS) · CC BY 4.0</string>
+    <string name="model_tomorrow">Tomorrow.io (needs API key, 5 daily days)</string>
+    <string name="attribution_tomorrow">Weather data: Tomorrow.io</string>
+    <string name="api_key">API key</string>
+    <string name="api_key_hint">Paste your Tomorrow.io API key</string>
+    <string name="api_key_note">Only needed for providers that require a key. Open-Meteo (ECMWF and NOAA GFS) works without one.</string>
+    <string name="api_key_note_required">Tomorrow.io needs this key. Get a free one at tomorrow.io, paste it here, then pull down to refresh.</string>
+    <string name="error_api_key">Enter your API key in Settings to use this provider.</string>
 </resources>

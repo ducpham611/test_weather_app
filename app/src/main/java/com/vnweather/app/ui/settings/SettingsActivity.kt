@@ -2,6 +2,8 @@ package com.vnweather.app.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -34,6 +36,7 @@ class SettingsActivity : AppCompatActivity() {
         title = getString(R.string.settings)
 
         setupModel()
+        setupApiKey()
         setupTemperature()
         setupWind()
         setupLanguage()
@@ -50,15 +53,41 @@ class SettingsActivity : AppCompatActivity() {
     private fun setupModel() {
         binding.radioModelEcmwf.isChecked = settings.weatherModel == SettingsStore.MODEL_ECMWF
         binding.radioModelGfs.isChecked = settings.weatherModel == SettingsStore.MODEL_GFS
+        binding.radioModelTomorrow.isChecked = settings.weatherModel == SettingsStore.MODEL_TOMORROW
         binding.groupModel.setOnCheckedChangeListener { _, id ->
-            settings.weatherModel = if (id == R.id.radioModelGfs) {
-                SettingsStore.MODEL_GFS
-            } else {
-                SettingsStore.MODEL_ECMWF
-            }
             // The cache is keyed per model, so the next load refetches instead
-            // of showing the other model's numbers.
+            // of showing the other provider's numbers.
+            settings.weatherModel = when (id) {
+                R.id.radioModelGfs -> SettingsStore.MODEL_GFS
+                R.id.radioModelTomorrow -> SettingsStore.MODEL_TOMORROW
+                else -> SettingsStore.MODEL_ECMWF
+            }
+            updateApiKeyHint()
         }
+    }
+
+    /**
+     * Key entry for providers that require one. Saved as you type so leaving
+     * the screen cannot lose it, and trimmed because pasted keys often carry
+     * a trailing space or newline.
+     */
+    private fun setupApiKey() {
+        binding.editApiKey.setText(settings.tomorrowApiKey)
+        binding.editApiKey.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) = Unit
+            override fun afterTextChanged(s: Editable?) {
+                settings.tomorrowApiKey = s?.toString().orEmpty()
+            }
+        })
+        updateApiKeyHint()
+    }
+
+    private fun updateApiKeyHint() {
+        val needsKey = settings.weatherModel == SettingsStore.MODEL_TOMORROW
+        binding.textApiKeyNote.setText(
+            if (needsKey) R.string.api_key_note_required else R.string.api_key_note
+        )
     }
 
     private fun setupTemperature() {

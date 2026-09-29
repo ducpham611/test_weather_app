@@ -112,7 +112,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val temperatureUnit: String get() = settings.temperatureUnit
     val windUnit: String get() = settings.windUnit
 
-    /** Drives the attribution line, which has to name the model in use. */
-    val isUsingGfs: Boolean
-        get() = settings.weatherModel == com.vnweather.app.data.local.SettingsStore.MODEL_GFS
+    /** The attribution line has to name the provider actually in use. */
+    val attributionRes: Int
+        get() = when (settings.weatherModel) {
+            com.vnweather.app.data.local.SettingsStore.MODEL_GFS -> R.string.attribution_gfs
+            com.vnweather.app.data.local.SettingsStore.MODEL_TOMORROW -> R.string.attribution_tomorrow
+            else -> R.string.attribution
+        }
 }

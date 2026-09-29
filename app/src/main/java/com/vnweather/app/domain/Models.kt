@@ -110,6 +110,7 @@ enum class ErrorType {
     TLS_ERROR,
     TIMEOUT,
     API_ERROR,
+    MISSING_API_KEY,
     LOCATION_UNAVAILABLE,
     UNKNOWN
 }

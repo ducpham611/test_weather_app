@@ -109,9 +109,16 @@
     <string name="wmo_thunderstorm_heavy">Dông mạnh</string>
     <string name="wmo_thunderstorm_hail">Dông kèm mưa đá</string>
     <string name="wmo_unknown">Không xác định</string>
-    <string name="weather_model">Mô hình dự báo</string>
+    <string name="weather_model">Nhà cung cấp dữ liệu</string>
     <string name="model_ecmwf">ECMWF IFS HRES (khuyên dùng)</string>
     <string name="model_gfs">NOAA GFS</string>
-    <string name="model_note">ECMWF là mô hình châu Âu độ phân giải 9 km, thường chính xác nhất cho Việt Nam. NOAA GFS khoảng 11 km nhưng có dữ liệu theo giờ xa hơn. Đổi mô hình sẽ tải lại dự báo.</string>
+    <string name="model_note">ECMWF là mô hình châu Âu độ phân giải 9 km, thường chính xác nhất cho Việt Nam. NOAA GFS khoảng 11 km nhưng có dữ liệu theo giờ xa hơn. Tomorrow.io cần khóa API và chỉ trả về 5 ngày. Đổi nhà cung cấp sẽ tải lại dự báo.</string>
     <string name="attribution_gfs">Dữ liệu thời tiết: Open-Meteo.com (NOAA GFS) · CC BY 4.0</string>
+    <string name="model_tomorrow">Tomorrow.io (cần khóa API, 5 ngày)</string>
+    <string name="attribution_tomorrow">Dữ liệu thời tiết: Tomorrow.io</string>
+    <string name="api_key">Khóa API</string>
+    <string name="api_key_hint">Dán khóa API Tomorrow.io của bạn</string>
+    <string name="api_key_note">Chỉ cần cho nhà cung cấp yêu cầu khóa. Open-Meteo (ECMWF và NOAA GFS) không cần khóa.</string>
+    <string name="api_key_note_required">Tomorrow.io cần khóa này. Lấy khóa miễn phí tại tomorrow.io, dán vào đây rồi kéo xuống để tải lại.</string>
+    <string name="error_api_key">Hãy nhập khóa API trong Cài đặt để dùng nhà cung cấp này.</string>
 </resources>

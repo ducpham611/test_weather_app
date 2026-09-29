@@ -6,6 +6,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.vnweather.app.BuildConfig
 import com.vnweather.app.data.remote.GeocodingApi
 import com.vnweather.app.data.remote.OpenMeteoApi
+import com.vnweather.app.data.remote.TomorrowApi
 import kotlinx.serialization.json.Json
 import okhttp3.ConnectionSpec
 import okhttp3.Interceptor
@@ -45,6 +46,10 @@ object NetworkModule {
 
     val openMeteoApi: OpenMeteoApi by lazy {
         buildRetrofit(OpenMeteoApi.BASE_URL).create(OpenMeteoApi::class.java)
+    }
+
+    val tomorrowApi: TomorrowApi by lazy {
+        buildRetrofit(TomorrowApi.BASE_URL).create(TomorrowApi::class.java)
     }
 
     val geocodingApi: GeocodingApi by lazy {

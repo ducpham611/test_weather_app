@@ -39,6 +39,11 @@ class SettingsStore(context: Context) {
         get() = prefs.getString(KEY_MODEL, MODEL_ECMWF) ?: MODEL_ECMWF
         set(value) = prefs.edit().putString(KEY_MODEL, value).apply()
 
+    /** API key for providers that need one (currently Tomorrow.io only). */
+    var tomorrowApiKey: String
+        get() = prefs.getString(KEY_TOMORROW_KEY, "")?.trim() ?: ""
+        set(value) = prefs.edit().putString(KEY_TOMORROW_KEY, value.trim()).apply()
+
     /** Language tag the widget reads; the widget has no AppCompat context. */
     var languageTag: String
         get() = prefs.getString(KEY_LANGUAGE, "") ?: ""
@@ -60,6 +65,9 @@ class SettingsStore(context: Context) {
         /** NOAA GFS: ~11 km, hourly out to 120 h, no gaps at the end of the run. */
         const val MODEL_GFS = "gfs_seamless"
 
+        /** Tomorrow.io. Needs a user-supplied key; daily timeline is 5 days. */
+        const val MODEL_TOMORROW = "tomorrow_io"
+
         /** 3 days by default, matching the main screen's short forecast. */
         const val DEFAULT_DAILY_DAYS = 3
         const val EXTENDED_DAILY_DAYS = 7
@@ -72,5 +80,6 @@ class SettingsStore(context: Context) {
         private const val KEY_NIGHT_MODE = "night_mode"
         private const val KEY_MODEL = "weather_model"
         private const val KEY_LANGUAGE = "language_tag"
+        private const val KEY_TOMORROW_KEY = "tomorrow_api_key"
     }
 }

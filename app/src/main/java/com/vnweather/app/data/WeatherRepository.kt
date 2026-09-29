@@ -5,11 +5,14 @@ import com.vnweather.app.data.local.SettingsStore
 import com.vnweather.app.data.remote.ForecastResponse
 import com.vnweather.app.data.remote.GeocodingApi
 import com.vnweather.app.data.remote.OpenMeteoApi
+import com.vnweather.app.data.remote.TomorrowApi
+import com.vnweather.app.data.remote.toDomain as tomorrowToDomain
 import com.vnweather.app.domain.City
 import com.vnweather.app.domain.CurrentWeather
 import com.vnweather.app.domain.DailyItem
 import com.vnweather.app.domain.Forecast
 import com.vnweather.app.domain.HourlyItem
+import com.vnweather.app.util.MissingApiKeyException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,6 +24,7 @@ import kotlinx.coroutines.withContext
  */
 class WeatherRepository(
     private val api: OpenMeteoApi,
+    private val tomorrowApi: TomorrowApi,
     private val geocodingApi: GeocodingApi,
     private val cache: ForecastCache,
     private val settings: SettingsStore
@@ -41,14 +45,17 @@ class WeatherRepository(
         }
 
         try {
-            val response = api.getForecast(
-                latitude = city.latitude,
-                longitude = city.longitude,
-                models = model,
-                temperatureUnit = settings.temperatureUnit,
-                windSpeedUnit = settings.windUnit
-            )
-            val forecast = response.toDomain(city, nowMillis)
+            val forecast = if (model == SettingsStore.MODEL_TOMORROW) {
+                fetchFromTomorrow(city, nowMillis)
+            } else {
+                api.getForecast(
+                    latitude = city.latitude,
+                    longitude = city.longitude,
+                    models = model,
+                    temperatureUnit = settings.temperatureUnit,
+                    windSpeedUnit = settings.windUnit
+                ).toDomain(city, nowMillis)
+            }
             cache.write(forecast, model)
             Result.success(forecast)
         } catch (e: Exception) {
@@ -57,6 +64,30 @@ class WeatherRepository(
             // never silently swallowed.
             Result.failure(e)
         }
+    }
+
+    /**
+     * Tomorrow.io needs a key the user pastes into Settings, and its daily
+     * timeline stops at 5 days, so trim to what it actually returns.
+     */
+    private suspend fun fetchFromTomorrow(city: City, nowMillis: Long): Forecast {
+        val key = settings.tomorrowApiKey
+        if (key.isBlank()) throw MissingApiKeyException()
+
+        val response = tomorrowApi.getForecast(
+            location = "${city.latitude},${city.longitude}",
+            apiKey = key
+        )
+        val forecast = response.tomorrowToDomain(
+            city = city,
+            fetchedAtMillis = nowMillis,
+            temperatureUnit = settings.temperatureUnit,
+            windUnit = settings.windUnit
+        )
+        return forecast.copy(
+            hourly = forecast.hourly.take(TomorrowApi.HOURS),
+            daily = forecast.daily.take(TomorrowApi.DAILY_DAYS)
+        )
     }
 
     /** Cached data only; used by the widget and by the offline path. */

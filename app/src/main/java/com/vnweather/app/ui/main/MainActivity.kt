@@ -225,9 +225,7 @@ class MainActivity : AppCompatActivity() {
         dailyList.temperatureUnit = tempUnit
         dailyList.render(forecast.daily.take(visibleDays))
 
-        binding.textAttribution.setText(
-            if (viewModel.isUsingGfs) R.string.attribution_gfs else R.string.attribution
-        )
+        binding.textAttribution.setText(viewModel.attributionRes)
 
         val expanded = viewModel.isShowingAllDays
         binding.buttonShowMore.apply {
@@ -252,6 +250,7 @@ class MainActivity : AppCompatActivity() {
             ErrorType.TLS_ERROR -> R.string.error_tls
             ErrorType.TIMEOUT -> R.string.error_timeout
             ErrorType.API_ERROR -> R.string.error_api
+            ErrorType.MISSING_API_KEY -> R.string.error_api_key
             ErrorType.LOCATION_UNAVAILABLE -> R.string.error_location
             ErrorType.UNKNOWN -> R.string.error_unknown
         }

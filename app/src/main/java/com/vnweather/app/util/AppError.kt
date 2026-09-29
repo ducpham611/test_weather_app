@@ -15,9 +15,13 @@ import javax.net.ssl.SSLException
  * which hid the real cause: a TLS handshake failure looks identical to an
  * offline phone unless you separate them.
  */
+/** The selected provider needs a key and Settings has none. */
+class MissingApiKeyException : Exception("API key required for the selected provider")
+
 object AppError {
 
     fun classify(error: Throwable): ErrorType = when (error) {
+        is MissingApiKeyException -> ErrorType.MISSING_API_KEY
         is UnknownHostException -> ErrorType.DNS_ERROR
         is SSLException -> ErrorType.TLS_ERROR
         is SocketTimeoutException -> ErrorType.TIMEOUT

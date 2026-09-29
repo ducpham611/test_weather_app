@@ -28,6 +28,7 @@
                 android:orientation="vertical">
                 <RadioButton android:id="@+id/radioModelEcmwf" style="@style/SettingsRadio" android:text="@string/model_ecmwf" />
                 <RadioButton android:id="@+id/radioModelGfs" style="@style/SettingsRadio" android:text="@string/model_gfs" />
+                <RadioButton android:id="@+id/radioModelTomorrow" style="@style/SettingsRadio" android:text="@string/model_tomorrow" />
             </RadioGroup>
             <TextView
                 android:layout_width="match_parent"
@@ -38,6 +39,28 @@
                 android:textSize="12sp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:text="@string/model_note" />
+
+            <TextView style="@style/SettingsHeader" android:text="@string/api_key" />
+            <EditText
+                android:id="@+id/editApiKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/api_key_hint"
+                android:importantForAutofill="no"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/textApiKeyNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:text="@string/api_key_note" />
 
             <TextView style="@style/SettingsHeader" android:text="@string/temperature_unit" />
             <RadioGroup
