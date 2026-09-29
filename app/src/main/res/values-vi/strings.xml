@@ -80,7 +80,7 @@
     <!-- Giới thiệu -->
     <string name="about">Giới thiệu</string>
     <string name="version_format">Phiên bản %1$s</string>
-    <string name="about_body">Dữ liệu thời tiết lấy từ Open-Meteo, dùng mô hình ECMWF IFS HRES – mô hình toàn cầu độ phân giải 9 km, cập nhật 6 giờ một lần.\n\nDữ liệu được cấp phép theo CC BY 4.0. Gói miễn phí của Open-Meteo chỉ dành cho mục đích phi thương mại.\n\nBiểu tượng thời tiết là của Google, lấy từ bộ google-weather-icons của mrdarrengriffin. Mọi quyền đối với biểu tượng thuộc về Google.</string>
+    <string name="about_body">Dữ liệu thời tiết lấy từ Open-Meteo, dùng mô hình ECMWF IFS HRES – mô hình toàn cầu độ phân giải 9 km, cập nhật 6 giờ một lần.\n\nDữ liệu được cấp phép theo CC BY 4.0. Gói miễn phí của Open-Meteo chỉ dành cho mục đích phi thương mại.\n\nNền thời tiết chuyển động lấy từ Breezy Weather (ui-weather-view), dùng theo giấy phép GNU LGPL v3.\n\nBiểu tượng thời tiết do Google thiết kế, lấy từ bộ google-weather-icons của mrdarrengriffin.</string>
     <string name="open_meteo_website">Mở Open-Meteo.com</string>
 
     <!-- Tiện ích màn hình chính -->
@@ -123,4 +123,7 @@
     <string name="error_api_key">Hãy nhập khóa API trong Cài đặt để dùng nhà cung cấp này.</string>
     <string name="error_api_key_rejected">Khóa API bị từ chối. Hãy kiểm tra lại trong Cài đặt, hoặc hạn mức miễn phí đã hết.</string>
     <string name="error_rate_limited">Gọi nhà cung cấp quá nhiều lần. Hãy đợi một lát rồi kéo xuống để tải lại.</string>
+    <string name="appearance">Giao diện</string>
+    <string name="animated_background">Nền thời tiết chuyển động</string>
+    <string name="animated_background_note">Vẽ mưa, mây hay nắng phía sau thẻ thời tiết hiện tại. Mặc định tắt trên máy ít bộ nhớ vì có thể bị giật.</string>
 </resources>

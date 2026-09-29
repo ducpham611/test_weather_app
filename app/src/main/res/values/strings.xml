@@ -80,7 +80,7 @@
     <!-- About -->
     <string name="about">About</string>
     <string name="version_format">Version %1$s</string>
-    <string name="about_body">Weather data comes from Open-Meteo using the ECMWF IFS HRES model, a global 9 km forecast updated every 6 hours.\n\nData is licensed under CC BY 4.0. The free Open-Meteo tier is for non-commercial use.\n\nWeather icons are by Google, from the google-weather-icons collection by mrdarrengriffin. All rights to the icons belong to Google.</string>
+    <string name="about_body">Weather data comes from Open-Meteo using the ECMWF IFS HRES model, a global 9 km forecast updated every 6 hours.\n\nData is licensed under CC BY 4.0. The free Open-Meteo tier is for non-commercial use.\n\nThe animated weather background comes from Breezy Weather (ui-weather-view), used under the GNU LGPL v3.\n\nWeather icons are by Google, from the google-weather-icons collection by mrdarrengriffin.</string>
     <string name="open_meteo_website">Open Open-Meteo.com</string>
 
     <!-- Widget -->
@@ -123,4 +123,7 @@
     <string name="error_api_key">Enter your API key in Settings to use this provider.</string>
     <string name="error_api_key_rejected">The API key was rejected. Check it in Settings, or the free quota may be used up.</string>
     <string name="error_rate_limited">Too many requests to the provider. Wait a moment and pull down to refresh.</string>
+    <string name="appearance">Appearance</string>
+    <string name="animated_background">Animated weather background</string>
+    <string name="animated_background_note">Draws rain, clouds or sun behind the current weather card. Off by default on low-memory phones, where it can stutter.</string>
 </resources>

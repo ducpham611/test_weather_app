@@ -81,6 +81,9 @@ android {
 }
 
 dependencies {
+    // Animated weather backgrounds (Breezy Weather, LGPL-3.0).
+    implementation(project(":ui-weather-view"))
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
 
     // AndroidX - all of these still support minSdk 21

@@ -104,6 +104,23 @@
                 <RadioButton android:id="@+id/radioSystemTheme" style="@style/SettingsRadio" android:text="@string/theme_system" />
             </RadioGroup>
 
+            <TextView style="@style/SettingsHeader" android:text="@string/appearance" />
+            <CheckBox
+                android:id="@+id/checkAnimatedBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/animated_background" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="4dp"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:text="@string/animated_background_note" />
+
             <TextView style="@style/SettingsHeader" android:text="@string/refresh_interval" />
             <Spinner
                 android:id="@+id/spinnerRefresh"

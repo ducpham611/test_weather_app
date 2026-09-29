@@ -41,6 +41,7 @@ class SettingsActivity : AppCompatActivity() {
         setupWind()
         setupLanguage()
         setupTheme()
+        setupAnimatedBackground()
         setupRefresh()
 
         binding.rowAbout.setOnClickListener {
@@ -149,6 +150,15 @@ class SettingsActivity : AppCompatActivity() {
             }
             settings.nightMode = mode
             AppCompatDelegate.setDefaultNightMode(mode)
+        }
+    }
+
+    private fun setupAnimatedBackground() {
+        binding.checkAnimatedBackground.isChecked = settings.animatedBackground
+        binding.checkAnimatedBackground.setOnCheckedChangeListener { _, checked ->
+            // MainActivity re-reads this in onResume and rebuilds itself, so
+            // the change is visible as soon as you go back.
+            settings.animatedBackground = checked
         }
     }
 

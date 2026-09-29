@@ -4,16 +4,19 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
@@ -21,11 +24,13 @@ import com.vnweather.app.databinding.ActivityMainBinding
 import com.vnweather.app.domain.ErrorType
 import com.vnweather.app.domain.Forecast
 import com.vnweather.app.domain.UiState
+import com.vnweather.app.domain.WeatherBackgroundMapper
 import com.vnweather.app.domain.WeatherCodeMapper
 import com.vnweather.app.ui.search.CitySearchActivity
 import com.vnweather.app.ui.settings.SettingsActivity
 import com.vnweather.app.util.Formatters
 import com.vnweather.app.util.LocaleHelper
+import org.breezyweather.ui.theme.weatherView.materialWeatherView.MaterialWeatherView
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +40,10 @@ class MainActivity : AppCompatActivity() {
 
     private val hourlyAdapter = HourlyAdapter()
     private lateinit var dailyList: DailyListRenderer
+
+    /** Read once per resume; the Settings screen can flip it while we are away. */
+    private var animatedBackground = false
+    private var weatherView: MaterialWeatherView? = null
 
     private val searchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -66,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         applyFontScaleLayout()
+        setupBackground()
         setupLists()
         setupActions()
         observe()
@@ -104,6 +114,64 @@ class MainActivity : AppCompatActivity() {
             // CENTER_VERTICAL when stacked is what left the three readings
             // hugging the left edge at large font sizes.
             (child as? LinearLayout)?.gravity = Gravity.CENTER_HORIZONTAL
+        }
+    }
+
+    /**
+     * Animated weather background, from Breezy Weather's ui-weather-view.
+     *
+     * The gravity sensor parallax is switched off: it keeps the accelerometer
+     * awake for a subtle tilt effect, which is a poor trade on the old phones
+     * this app targets. The view is also told to stop drawing whenever the
+     * activity is not resumed.
+     */
+    private fun setupBackground() {
+        animatedBackground = (application as WeatherApp).settings.animatedBackground
+
+        binding.weatherBackground.visibility =
+            if (animatedBackground) View.VISIBLE else View.GONE
+
+        if (animatedBackground) {
+            weatherView = MaterialWeatherView(this).also { view ->
+                view.setGravitySensorEnabled(false)
+                view.setDoAnimate(true)
+                view.setDrawable(true)
+                binding.weatherBackground.addView(
+                    view,
+                    FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                    )
+                )
+            }
+        }
+
+        // Keep the lower half opaque so small grey text never lands on the
+        // animation, and swap the current card for a dark scrim with white
+        // text, which stays readable over every one of Breezy's gradients.
+        binding.lowerContent.setBackgroundColor(
+            if (animatedBackground) {
+                ContextCompat.getColor(this, R.color.screen_background)
+            } else {
+                Color.TRANSPARENT
+            }
+        )
+
+        if (animatedBackground) {
+            binding.currentCard.setBackgroundResource(R.drawable.bg_card_scrim)
+            val primary = ContextCompat.getColor(this, R.color.on_scrim_primary)
+            val secondary = ContextCompat.getColor(this, R.color.on_scrim_secondary)
+            binding.textCityName.setTextColor(primary)
+            binding.textTemperature.setTextColor(primary)
+            binding.textCondition.setTextColor(primary)
+            binding.textCitySubtitle.setTextColor(secondary)
+            binding.textFeelsLike.setTextColor(secondary)
+            binding.textUpdatedAt.setTextColor(secondary)
+        }
+
+        // onScroll drives the parallax; API 21 has no View.setOnScrollChangeListener.
+        binding.scrollView.viewTreeObserver.addOnScrollChangedListener {
+            weatherView?.onScroll(binding.scrollView.scrollY)
         }
     }
 
@@ -236,6 +304,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.textAttribution.setText(viewModel.attributionRes)
 
+        weatherView?.setWeather(
+            WeatherBackgroundMapper.weatherKind(current.weatherCode),
+            current.isDay,
+            isNightMode()
+        )
+
         val expanded = viewModel.isShowingAllDays
         binding.buttonShowMore.apply {
             visibility = if (forecast.daily.size > visibleDays || expanded) View.VISIBLE else View.GONE
@@ -318,10 +392,25 @@ class MainActivity : AppCompatActivity() {
         applyFontScaleLayout()
     }
 
+    private fun isNightMode(): Boolean =
+        resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+            Configuration.UI_MODE_NIGHT_YES
+
     override fun onResume() {
         super.onResume()
         // Settings (units / language) may have changed while we were away.
+        if ((application as WeatherApp).settings.animatedBackground != animatedBackground) {
+            recreate()
+            return
+        }
+        weatherView?.setDrawable(true)
         viewModel.load()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Never animate in the background; this is the main battery saver.
+        weatherView?.setDrawable(false)
     }
 
     private companion object {

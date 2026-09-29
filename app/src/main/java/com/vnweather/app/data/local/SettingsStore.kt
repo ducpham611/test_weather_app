@@ -1,12 +1,16 @@
 package com.vnweather.app.data.local
 
+import android.app.ActivityManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.getSystemService
 
 /** All user preferences, backed by a single SharedPreferences file. */
 class SettingsStore(context: Context) {
 
-    private val prefs = context.applicationContext
+    private val appContext = context.applicationContext
+
+    private val prefs = appContext
         .getSharedPreferences("settings", Context.MODE_PRIVATE)
 
     /** "celsius" or "fahrenheit" */
@@ -49,6 +53,20 @@ class SettingsStore(context: Context) {
         get() = prefs.getString(KEY_LANGUAGE, "") ?: ""
         set(value) = prefs.edit().putString(KEY_LANGUAGE, value).apply()
 
+    /**
+     * Animated weather background.
+     *
+     * Defaults to on, except on devices the system flags as low-RAM: those
+     * are exactly the old, slow handsets where a full-screen animation is a
+     * bad trade. The user can still switch it on by hand.
+     */
+    var animatedBackground: Boolean
+        get() = prefs.getBoolean(KEY_ANIMATED_BG, !isLowRamDevice())
+        set(value) = prefs.edit().putBoolean(KEY_ANIMATED_BG, value).apply()
+
+    private fun isLowRamDevice(): Boolean =
+        appContext.getSystemService<ActivityManager>()?.isLowRamDevice ?: false
+
     var nightMode: Int
         get() = prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         set(value) = prefs.edit().putInt(KEY_NIGHT_MODE, value).apply()
@@ -81,5 +99,6 @@ class SettingsStore(context: Context) {
         private const val KEY_MODEL = "weather_model"
         private const val KEY_LANGUAGE = "language_tag"
         private const val KEY_TOMORROW_KEY = "tomorrow_api_key"
+        private const val KEY_ANIMATED_BG = "animated_background"
     }
 }

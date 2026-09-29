@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "VNWeather"
 include(":app")
+include(":ui-weather-view")

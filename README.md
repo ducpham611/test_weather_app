@@ -117,3 +117,13 @@ cache freshness, and formatting.
 - A bundled offline list of Vietnam's provinces and districts (search covers most of
   them, but a few small districts may be missing).
 - Rain alert notifications and the temperature chart (marked as v2 in the plan).
+
+## Modules
+
+| Module | Purpose |
+| --- | --- |
+| `app` | The application itself. |
+| `ui-weather-view` | Animated weather backgrounds, copied unmodified from [Breezy Weather](https://github.com/breezy-weather/breezy-weather) and used under the **GNU LGPL v3**. See `ui-weather-view/README.md` and `ui-weather-view/LICENSE`. |
+
+The animation is controlled by **Settings → Appearance → Animated weather
+background**. It defaults to off on devices the system reports as low-RAM.
