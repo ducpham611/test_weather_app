@@ -80,7 +80,7 @@
     <!-- Giới thiệu -->
     <string name="about">Giới thiệu</string>
     <string name="version_format">Phiên bản %1$s</string>
-    <string name="about_body">Dữ liệu thời tiết lấy từ Open-Meteo, dùng mô hình ECMWF IFS HRES – mô hình toàn cầu độ phân giải 9 km, cập nhật 6 giờ một lần.\n\nDữ liệu được cấp phép theo CC BY 4.0. Gói miễn phí của Open-Meteo chỉ dành cho mục đích phi thương mại.</string>
+    <string name="about_body">Dữ liệu thời tiết lấy từ Open-Meteo, dùng mô hình ECMWF IFS HRES – mô hình toàn cầu độ phân giải 9 km, cập nhật 6 giờ một lần.\n\nDữ liệu được cấp phép theo CC BY 4.0. Gói miễn phí của Open-Meteo chỉ dành cho mục đích phi thương mại.\n\nBiểu tượng thời tiết là của Google, lấy từ bộ google-weather-icons của mrdarrengriffin. Mọi quyền đối với biểu tượng thuộc về Google.</string>
     <string name="open_meteo_website">Mở Open-Meteo.com</string>
 
     <!-- Tiện ích màn hình chính -->

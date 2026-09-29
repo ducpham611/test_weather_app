@@ -42,14 +42,20 @@ object WeatherCodeMapper {
     @DrawableRes
     fun iconRes(code: Int, isDay: Boolean): Int = when (code) {
         0 -> if (isDay) R.drawable.ic_weather_sunny else R.drawable.ic_weather_night
-        1, 2 -> if (isDay) R.drawable.ic_weather_partly_cloudy else R.drawable.ic_weather_night_cloudy
+        1 -> if (isDay) R.drawable.ic_weather_mostly_clear else R.drawable.ic_weather_mostly_clear_night
+        2 -> if (isDay) R.drawable.ic_weather_partly_cloudy else R.drawable.ic_weather_night_cloudy
         3 -> R.drawable.ic_weather_cloudy
         45, 48 -> R.drawable.ic_weather_fog
-        51, 53, 55, 56, 57 -> R.drawable.ic_weather_drizzle
-        61, 63, 65, 66, 67 -> R.drawable.ic_weather_rain
-        71, 73, 75, 77, 85, 86 -> R.drawable.ic_weather_snow
-        80, 81, 82 -> R.drawable.ic_weather_showers
-        95, 96, 97, 99 -> R.drawable.ic_weather_thunder
+        51, 53, 55 -> R.drawable.ic_weather_drizzle
+        // Freezing drizzle / freezing rain read as sleet, not plain rain.
+        56, 57, 66, 67 -> R.drawable.ic_weather_sleet
+        61, 63 -> R.drawable.ic_weather_rain
+        65, 82 -> R.drawable.ic_weather_rain_heavy
+        71, 73, 77, 85, 86 -> R.drawable.ic_weather_snow
+        75 -> R.drawable.ic_weather_snow_heavy
+        80, 81 -> R.drawable.ic_weather_showers
+        95 -> R.drawable.ic_weather_thunder
+        96, 97, 99 -> R.drawable.ic_weather_thunder_strong
         else -> R.drawable.ic_weather_cloudy
     }
 

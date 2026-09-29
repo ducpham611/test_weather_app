@@ -22,7 +22,7 @@ class TomorrowCodeMapperTest {
     fun `heavy rain keeps a rain icon`() {
         val wmo = TomorrowCodeMapper.toWmo(4201)
         assertEquals(65, wmo)
-        assertEquals(R.drawable.ic_weather_rain, WeatherCodeMapper.iconRes(wmo, true))
+        assertEquals(R.drawable.ic_weather_rain_heavy, WeatherCodeMapper.iconRes(wmo, true))
     }
 
     @Test

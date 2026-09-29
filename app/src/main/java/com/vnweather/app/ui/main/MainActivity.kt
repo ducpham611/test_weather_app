@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         val row = binding.detailRow
 
         row.orientation = if (stack) LinearLayout.VERTICAL else LinearLayout.HORIZONTAL
+        row.gravity = if (stack) Gravity.CENTER_HORIZONTAL else Gravity.CENTER_VERTICAL
 
         for (i in 0 until row.childCount) {
             val child = row.getChildAt(i)
@@ -99,8 +100,10 @@ class MainActivity : AppCompatActivity() {
                 params.weight = 1f
             }
             child.layoutParams = params
-            (child as? LinearLayout)?.gravity =
-                if (stack) Gravity.CENTER_VERTICAL else Gravity.CENTER_HORIZONTAL
+            // Always centre the label and value inside the cell. Switching to
+            // CENTER_VERTICAL when stacked is what left the three readings
+            // hugging the left edge at large font sizes.
+            (child as? LinearLayout)?.gravity = Gravity.CENTER_HORIZONTAL
         }
     }
 
