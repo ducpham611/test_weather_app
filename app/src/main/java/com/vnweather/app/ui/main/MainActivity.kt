@@ -132,17 +132,23 @@ class MainActivity : AppCompatActivity() {
         }
         binding.headerCity.setOnClickListener { openSearch() }
 
-        // Long-press the timestamp to see the raw failure. Invaluable when the
+        // Long-press either the timestamp or the error text to see the raw
+        // failure, including the provider's own message. Invaluable when the
         // UI says one thing and the network is doing another.
+        binding.textError.setOnLongClickListener { showLastError(); true }
         binding.textUpdatedAt.setOnLongClickListener {
-            val detail = viewModel.lastErrorDetail ?: getString(R.string.no_recent_error)
-            AlertDialog.Builder(this)
-                .setTitle(R.string.last_error)
-                .setMessage(detail)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
+            showLastError()
             true
         }
+    }
+
+    private fun showLastError() {
+        val detail = viewModel.lastErrorDetail ?: getString(R.string.no_recent_error)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.last_error)
+            .setMessage(detail)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     private fun observe() {
@@ -251,6 +257,8 @@ class MainActivity : AppCompatActivity() {
             ErrorType.TIMEOUT -> R.string.error_timeout
             ErrorType.API_ERROR -> R.string.error_api
             ErrorType.MISSING_API_KEY -> R.string.error_api_key
+            ErrorType.API_KEY_REJECTED -> R.string.error_api_key_rejected
+            ErrorType.RATE_LIMITED -> R.string.error_rate_limited
             ErrorType.LOCATION_UNAVAILABLE -> R.string.error_location
             ErrorType.UNKNOWN -> R.string.error_unknown
         }

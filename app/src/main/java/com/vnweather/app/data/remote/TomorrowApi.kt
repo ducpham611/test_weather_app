@@ -30,7 +30,10 @@ interface TomorrowApi {
     suspend fun getForecast(
         @Query("location") location: String,
         @Query("apikey") apiKey: String,
-        @Query("timesteps") timesteps: List<String> = listOf("1h", "1d"),
+        // Left unset on purpose. The endpoint returns the hourly and daily
+        // timelines by default, and sending timesteps as a repeated array
+        // parameter is a common source of HTTP 400 from this API.
+        @Query("timesteps") timesteps: String? = null,
         // Always metric; the mapper converts to whatever the user picked so we
         // never have to reason about two unit systems at once.
         @Query("units") units: String = "metric"

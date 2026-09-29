@@ -111,6 +111,8 @@ enum class ErrorType {
     TIMEOUT,
     API_ERROR,
     MISSING_API_KEY,
+    API_KEY_REJECTED,
+    RATE_LIMITED,
     LOCATION_UNAVAILABLE,
     UNKNOWN
 }

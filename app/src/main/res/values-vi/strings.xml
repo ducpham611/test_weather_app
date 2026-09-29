@@ -121,4 +121,6 @@
     <string name="api_key_note">Chỉ cần cho nhà cung cấp yêu cầu khóa. Open-Meteo (ECMWF và NOAA GFS) không cần khóa.</string>
     <string name="api_key_note_required">Tomorrow.io cần khóa này. Lấy khóa miễn phí tại tomorrow.io, dán vào đây rồi kéo xuống để tải lại.</string>
     <string name="error_api_key">Hãy nhập khóa API trong Cài đặt để dùng nhà cung cấp này.</string>
+    <string name="error_api_key_rejected">Khóa API bị từ chối. Hãy kiểm tra lại trong Cài đặt, hoặc hạn mức miễn phí đã hết.</string>
+    <string name="error_rate_limited">Gọi nhà cung cấp quá nhiều lần. Hãy đợi một lát rồi kéo xuống để tải lại.</string>
 </resources>

@@ -121,4 +121,6 @@
     <string name="api_key_note">Only needed for providers that require a key. Open-Meteo (ECMWF and NOAA GFS) works without one.</string>
     <string name="api_key_note_required">Tomorrow.io needs this key. Get a free one at tomorrow.io, paste it here, then pull down to refresh.</string>
     <string name="error_api_key">Enter your API key in Settings to use this provider.</string>
+    <string name="error_api_key_rejected">The API key was rejected. Check it in Settings, or the free quota may be used up.</string>
+    <string name="error_rate_limited">Too many requests to the provider. Wait a moment and pull down to refresh.</string>
 </resources>
