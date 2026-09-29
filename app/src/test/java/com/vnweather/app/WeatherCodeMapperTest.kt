@@ -24,10 +24,10 @@ class WeatherCodeMapperTest {
     @Test
     fun `heavy thunderstorm code 97 is mapped`() {
         assertEquals(R.string.wmo_thunderstorm_heavy, WeatherCodeMapper.descriptionRes(97))
-        assertEquals(
-            WeatherCodeMapper.iconRes(95, true),
-            WeatherCodeMapper.iconRes(97, true)
-        )
+        // The Google icon set has a separate severe-storm icon, so 97 must
+        // NOT share the plain thunderstorm icon used for 95.
+        assertEquals(R.drawable.ic_weather_thunder, WeatherCodeMapper.iconRes(95, true))
+        assertEquals(R.drawable.ic_weather_thunder_strong, WeatherCodeMapper.iconRes(97, true))
     }
 
     @Test
