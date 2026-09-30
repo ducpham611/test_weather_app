@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- The root carries the static weather gradient (set in code) and reaches
+     behind the transparent status bar; fitsSystemWindows keeps the content
+     itself clear of the system bars. -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Holder for the animated weather background (Breezy Weather,
-         LGPL-3.0). MaterialWeatherView only has a (Context) constructor, so
-         it cannot be inflated from XML and is added in code. Hidden until the
-         setting turns it on, so the plain background stays the default. -->
-    <FrameLayout
-        android:id="@+id/weatherBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_default"
+    android:fitsSystemWindows="true"
+    app:statusBarBackground="@android:color/transparent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:stateListAnimator="@null"
         app:elevation="0dp">
 
@@ -25,6 +22,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
+            app:titleTextColor="@color/on_glass_primary"
             app:title="@string/app_name" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -45,6 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:paddingBottom="16dp">
 
                 <ProgressBar
@@ -58,20 +60,18 @@
                 <!-- Error state -->
                 <LinearLayout
                     android:id="@+id/errorGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    style="@style/GlassBlock"
                     android:gravity="center"
                     android:padding="24dp"
                     android:visibility="gone">
 
                     <TextView
                         android:id="@+id/textError"
+                        style="@style/OnGlass"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="15sp"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textSize="15sp" />
 
                     <Button
                         android:id="@+id/buttonRetry"
@@ -79,10 +79,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:textColor="@color/on_glass_primary"
+                        app:strokeColor="@color/on_glass_primary"
                         android:text="@string/retry" />
                 </LinearLayout>
 
-                <!-- Main content -->
+                <!-- Main content: four identical see-through blocks -->
                 <LinearLayout
                     android:id="@+id/contentGroup"
                     android:layout_width="match_parent"
@@ -90,20 +92,13 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <!-- Current weather: white rounded card -->
+                    <!-- 1. Current weather -->
                     <LinearLayout
                         android:id="@+id/currentCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        style="@style/GlassBlock"
+                        android:layout_marginTop="4dp"
                         android:gravity="center_horizontal"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_card_surface"
-                        android:elevation="2dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="20dp">
+                        android:paddingBottom="18dp">
 
                         <LinearLayout
                             android:id="@+id/headerCity"
@@ -117,6 +112,7 @@
 
                             <TextView
                                 android:id="@+id/textCityName"
+                                style="@style/OnGlass"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
@@ -124,11 +120,11 @@
                                 android:paddingEnd="16dp"
                                 android:maxLines="2"
                                 android:ellipsize="end"
-                                android:textSize="22sp"
-                                android:textColor="?android:attr/textColorPrimary" />
+                                android:textSize="22sp" />
 
                             <TextView
                                 android:id="@+id/textCitySubtitle"
+                                style="@style/OnGlass.Secondary"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
@@ -136,8 +132,7 @@
                                 android:paddingEnd="16dp"
                                 android:maxLines="2"
                                 android:ellipsize="end"
-                                android:textSize="13sp"
-                                android:textColor="?android:attr/textColorSecondary" />
+                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <ImageView
@@ -149,55 +144,49 @@
 
                         <TextView
                             android:id="@+id/textTemperature"
+                            style="@style/OnGlass"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:maxLines="1"
-                            android:textSize="56sp"
-                            android:textColor="?android:attr/textColorPrimary" />
+                            android:textSize="56sp" />
 
                         <TextView
                             android:id="@+id/textCondition"
+                            style="@style/OnGlass"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:gravity="center_horizontal"
                             android:paddingStart="24dp"
                             android:paddingEnd="24dp"
-                            android:textSize="16sp"
-                            android:textColor="?android:attr/textColorPrimary" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/textFeelsLike"
+                            style="@style/OnGlass.Secondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="center_horizontal"
-                            android:textSize="13sp"
-                            android:textColor="?android:attr/textColorSecondary" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textUpdatedAt"
+                            style="@style/OnGlass.Secondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:gravity="center_horizontal"
-                            android:textSize="12sp"
-                            android:textColor="?android:attr/textColorSecondary" />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
-                    <!-- Detail row: blue rounded card -->
+                    <!-- 2. Humidity / wind / rain -->
                     <LinearLayout
                         android:id="@+id/detailRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/GlassBlock"
                         android:orientation="horizontal"
                         android:baselineAligned="false"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_card_blue"
-                        android:elevation="2dp"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp">
 
@@ -229,113 +218,110 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Everything below the two cards keeps an opaque
-                         background, so the animation never sits behind small
-                         grey text. -->
+                    <!-- 3. Next 24 hours -->
                     <LinearLayout
-                        android:id="@+id/lowerContent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingBottom="8dp">
-
-                    <!-- Hourly -->
-                    <TextView
-                        style="@style/SectionTitle"
-                        android:text="@string/hourly_title" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerHourly"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="96dp"
-                        android:clipToPadding="false"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:overScrollMode="never" />
-
-                    <!-- Daily, with Min / Max column headers -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false"
-                        android:gravity="center_vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="4dp">
+                        android:id="@+id/hourlyBlock"
+                        style="@style/GlassBlock">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="?android:attr/textColorSecondary"
-                            android:text="@string/daily_title" />
+                            style="@style/GlassTitle"
+                            android:text="@string/hourly_title" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerHourly"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:minWidth="40dp"
-                            android:gravity="end"
-                            android:maxLines="1"
-                            android:textSize="13sp"
-                            android:textColor="?android:attr/textColorSecondary"
-                            android:text="@string/temp_min" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="44dp"
-                            android:gravity="end"
-                            android:maxLines="1"
-                            android:textSize="13sp"
-                            android:textColor="?android:attr/textColorSecondary"
-                            android:text="@string/temp_max" />
+                            android:minHeight="96dp"
+                            android:clipToPadding="false"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:overScrollMode="never" />
                     </LinearLayout>
 
-                    <!-- Plain container, not a RecyclerView: the section has to
-                         grow with its content so the page scrolls as one piece
-                         and every expanded day is visible. -->
+                    <!-- 4. Upcoming days, with Min / Max column headers -->
                     <LinearLayout
-                        android:id="@+id/dailyContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
+                        android:id="@+id/dailyBlock"
+                        style="@style/GlassBlock">
 
-                    <!-- A TextView, not a Button. Under a MaterialComponents
-                         theme <Button> inflates as MaterialButton, which ignores
-                         android:background and keeps its own blue fill, leaving
-                         blue text on blue. -->
-                    <TextView
-                        android:id="@+id/buttonShowMore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_pill"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:elevation="2dp"
-                        android:minHeight="44dp"
-                        android:gravity="center"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="24dp"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:textAllCaps="true"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/sky_blue"
-                        android:text="@string/show_more" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="2dp">
+
+                            <TextView
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:text="@string/daily_title" />
+
+                            <TextView
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="40dp"
+                                android:gravity="end"
+                                android:maxLines="1"
+                                android:textSize="13sp"
+                                android:text="@string/temp_min" />
+
+                            <TextView
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="44dp"
+                                android:gravity="end"
+                                android:maxLines="1"
+                                android:textSize="13sp"
+                                android:text="@string/temp_max" />
+                        </LinearLayout>
+
+                        <!-- Plain container, not a RecyclerView: the section has to
+                             grow with its content so the page scrolls as one piece
+                             and every expanded day is visible. -->
+                        <LinearLayout
+                            android:id="@+id/dailyContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp" />
+
+                        <!-- A TextView, not a Button. Under a MaterialComponents
+                             theme <Button> inflates as MaterialButton, which ignores
+                             android:background and keeps its own blue fill. -->
+                        <TextView
+                            android:id="@+id/buttonShowMore"
+                            style="@style/OnGlass"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_glass_pill"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:minHeight="44dp"
+                            android:gravity="center"
+                            android:paddingStart="24dp"
+                            android:paddingEnd="24dp"
+                            android:paddingTop="12dp"
+                            android:paddingBottom="12dp"
+                            android:textAllCaps="true"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:text="@string/show_more" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textAttribution"
+                        style="@style/OnGlass.Secondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -343,9 +329,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textSize="11sp"
-                        android:textColor="?android:attr/textColorSecondary"
                         android:text="@string/attribution" />
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

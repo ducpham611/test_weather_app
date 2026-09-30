@@ -154,11 +154,11 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupAnimatedBackground() {
-        binding.checkAnimatedBackground.isChecked = settings.animatedBackground
+        binding.checkAnimatedBackground.isChecked = settings.weatherBackground
         binding.checkAnimatedBackground.setOnCheckedChangeListener { _, checked ->
-            // MainActivity re-reads this in onResume and rebuilds itself, so
-            // the change is visible as soon as you go back.
-            settings.animatedBackground = checked
+            // MainActivity re-reads this in onResume and swaps the
+            // background, so the change is visible as soon as you go back.
+            settings.weatherBackground = checked
         }
     }
 

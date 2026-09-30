@@ -4,18 +4,16 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
-import android.view.Choreographer
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.view.ViewCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,7 +30,8 @@ import com.vnweather.app.ui.search.CitySearchActivity
 import com.vnweather.app.ui.settings.SettingsActivity
 import com.vnweather.app.util.Formatters
 import com.vnweather.app.util.LocaleHelper
-import org.breezyweather.ui.theme.weatherView.materialWeatherView.MaterialWeatherView
+import org.breezyweather.ui.theme.weatherView.WeatherView
+import org.breezyweather.ui.theme.weatherView.materialWeatherView.WeatherImplementorFactory
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -44,46 +43,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dailyList: DailyListRenderer
 
     /** Read once per resume; the Settings screen can flip it while we are away. */
-    private var animatedBackground = false
-    private var weatherView: MaterialWeatherView? = null
+    private var weatherBackground = true
 
-    /**
-     * Keeps the animated background ticking every display frame.
-     *
-     * Breezy's painter re-arms itself with postInvalidate() from inside
-     * onDraw(); if a single frame is ever skipped (Samsung adaptive refresh,
-     * a busy main thread, the window briefly losing focus) the chain breaks
-     * and the rain freezes until something else redraws it. This callback
-     * nudges the painter each vsync so the loop can never die. Two
-     * invalidations in one frame collapse into one draw, so it costs nothing
-     * extra when the built-in loop is healthy.
-     */
-    private var driveFrames = false
-    private val frameDriver = object : Choreographer.FrameCallback {
-        override fun doFrame(frameTimeNanos: Long) {
-            if (!driveFrames) return
-            val view = weatherView ?: return
-            // Only while the animated area is actually on screen; below the
-            // current card everything sits on an opaque background.
-            if (binding.scrollView.scrollY < binding.currentCard.bottom) {
-                for (i in 0 until view.childCount) {
-                    ViewCompat.postInvalidateOnAnimation(view.getChildAt(i))
-                }
-            }
-            Choreographer.getInstance().postFrameCallback(this)
-        }
-    }
-
-    private fun startFrameDriver() {
-        if (weatherView == null || driveFrames) return
-        driveFrames = true
-        Choreographer.getInstance().postFrameCallback(frameDriver)
-    }
-
-    private fun stopFrameDriver() {
-        driveFrames = false
-        Choreographer.getInstance().removeFrameCallback(frameDriver)
-    }
+    /** Last conditions painted, so a re-render with the same weather is free. */
+    private var backgroundCode: Int? = null
+    private var backgroundIsDay = true
+    @androidx.annotation.DrawableRes
+    private var backgroundRes = 0
 
     private val searchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -158,65 +124,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Animated weather background, from Breezy Weather's ui-weather-view.
+     * Static weather background: Breezy Weather's gradient for the current
+     * conditions (ui-weather-view, LGPL-3.0), with no animation at all.
      *
-     * The gravity sensor parallax is switched off: it keeps the accelerometer
-     * awake for a subtle tilt effect, which is a poor trade on the old phones
-     * this app targets. The view is also told to stop drawing whenever the
-     * activity is not resumed.
+     * The gradient fills the whole screen, including behind the transparent
+     * status bar, and the four glass blocks sit on top of it. A light dark
+     * wash over the gradient keeps white text readable: several of Breezy's
+     * daytime gradients fade to almost white at the bottom.
      */
     private fun setupBackground() {
-        animatedBackground = (application as WeatherApp).settings.animatedBackground
+        weatherBackground = (application as WeatherApp).settings.weatherBackground
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        @Suppress("DEPRECATION")
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        applyBackground(backgroundCode, backgroundIsDay)
+    }
 
-        binding.weatherBackground.visibility =
-            if (animatedBackground) View.VISIBLE else View.GONE
+    private fun applyBackground(code: Int?, isDay: Boolean) {
+        backgroundCode = code
+        backgroundIsDay = isDay
 
-        if (animatedBackground) {
-            weatherView = MaterialWeatherView(this).also { view ->
-                view.setGravitySensorEnabled(false)
-                view.setDoAnimate(true)
-                view.setDrawable(true)
-                binding.weatherBackground.addView(
-                    view,
-                    FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.MATCH_PARENT
-                    )
-                )
-            }
+        val kind = code?.let { WeatherBackgroundMapper.weatherKind(it) }
+            ?: WeatherView.WEATHER_KIND_NULL
+        val res = if (weatherBackground && kind != WeatherView.WEATHER_KIND_NULL) {
+            WeatherImplementorFactory.getBackgroundId(kind, isDay)
+        } else {
+            // Breezy's "default" is fully transparent, so use our own blue.
+            R.drawable.bg_screen_default
         }
+        if (res == backgroundRes) return
+        backgroundRes = res
 
-        // Keep the lower half opaque so small grey text never lands on the
-        // animation, and swap the current card for a dark scrim with white
-        // text, which stays readable over every one of Breezy's gradients.
-        binding.lowerContent.setBackgroundColor(
-            if (animatedBackground) {
-                ContextCompat.getColor(this, R.color.screen_background)
-            } else {
-                Color.TRANSPARENT
-            }
-        )
-
-        if (animatedBackground) {
-            binding.currentCard.setBackgroundResource(R.drawable.bg_card_scrim)
-            val primary = ContextCompat.getColor(this, R.color.on_scrim_primary)
-            val secondary = ContextCompat.getColor(this, R.color.on_scrim_secondary)
-            binding.textCityName.setTextColor(primary)
-            binding.textTemperature.setTextColor(primary)
-            binding.textCondition.setTextColor(primary)
-            binding.textCitySubtitle.setTextColor(secondary)
-            binding.textFeelsLike.setTextColor(secondary)
-            binding.textUpdatedAt.setTextColor(secondary)
-        }
-
-        // onScroll drives the parallax; API 21 has no View.setOnScrollChangeListener.
-        // Skip until the view has been measured: before that Breezy divides
-        // by zero, the scroll rate becomes NaN and nothing is drawn at all.
-        binding.scrollView.viewTreeObserver.addOnScrollChangedListener {
-            weatherView?.let { view ->
-                if (view.height > 0) view.onScroll(binding.scrollView.scrollY)
-            }
-        }
+        val gradient = ContextCompat.getDrawable(this, res) ?: return
+        val wash = ColorDrawable(ContextCompat.getColor(this, R.color.background_wash))
+        binding.root.background = LayerDrawable(arrayOf(gradient, wash))
     }
 
     private fun setupLists() {
@@ -332,7 +274,7 @@ class MainActivity : AppCompatActivity() {
 
         // Hourly: the next 24 hours.
         hourlyAdapter.temperatureUnit = tempUnit
-        hourlyAdapter.submitList(upcomingHours(forecast, HOURS_SHOWN)) {
+        hourlyAdapter.submitHours(upcomingHours(forecast, HOURS_SHOWN)) {
             // submitList computes its diff on a background thread; request a
             // layout pass after it commits so the ScrollView picks up the
             // list's real height on the very first load.
@@ -348,11 +290,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.textAttribution.setText(viewModel.attributionRes)
 
-        weatherView?.setWeather(
-            WeatherBackgroundMapper.weatherKind(current.weatherCode),
-            current.isDay,
-            isNightMode()
-        )
+        applyBackground(current.weatherCode, current.isDay)
 
         val expanded = viewModel.isShowingAllDays
         binding.buttonShowMore.apply {
@@ -436,27 +374,16 @@ class MainActivity : AppCompatActivity() {
         applyFontScaleLayout()
     }
 
-    private fun isNightMode(): Boolean =
-        resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
-            Configuration.UI_MODE_NIGHT_YES
-
     override fun onResume() {
         super.onResume()
-        // Settings (units / language) may have changed while we were away.
-        if ((application as WeatherApp).settings.animatedBackground != animatedBackground) {
-            recreate()
-            return
+        // Settings (units / language / background) may have changed while we
+        // were away. The background is only a drawable swap, so no recreate.
+        val wanted = (application as WeatherApp).settings.weatherBackground
+        if (wanted != weatherBackground) {
+            weatherBackground = wanted
+            applyBackground(backgroundCode, backgroundIsDay)
         }
-        weatherView?.setDrawable(true)
-        startFrameDriver()
         viewModel.load()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Never animate in the background; this is the main battery saver.
-        stopFrameDriver()
-        weatherView?.setDrawable(false)
     }
 
     private companion object {

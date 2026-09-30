@@ -24,6 +24,24 @@ class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
 
     var temperatureUnit: String = "celsius"
 
+    /** Coldest and warmest hour in the list, the temperature line's scale. */
+    private var minTemp = 0.0
+    private var maxTemp = 0.0
+
+    /**
+     * Use this instead of submitList. Each cell's slice of the temperature
+     * line depends on its neighbours and on the whole list's range, which
+     * DiffUtil cannot see, so every visible cell is rebound after the diff.
+     */
+    fun submitHours(hours: List<HourlyItem>, onCommitted: () -> Unit) {
+        minTemp = hours.minOfOrNull { it.temperature } ?: 0.0
+        maxTemp = hours.maxOfOrNull { it.temperature } ?: 0.0
+        submitList(hours) {
+            notifyItemRangeChanged(0, itemCount)
+            onCommitted()
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val binding = ItemHourlyBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -33,10 +51,19 @@ class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.bind(getItem(position), position == 0)
+        holder.bindLine(
+            previous = if (position > 0) getItem(position - 1).temperature else null,
+            current = getItem(position).temperature,
+            next = if (position < itemCount - 1) getItem(position + 1).temperature else null
+        )
     }
 
     inner class VH(private val binding: ItemHourlyBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        fun bindLine(previous: Double?, current: Double, next: Double?) {
+            binding.tempLine.setTemperatures(previous, current, next, minTemp, maxTemp)
+        }
 
         fun bind(item: HourlyItem, isFirst: Boolean) {
             val context = binding.root.context

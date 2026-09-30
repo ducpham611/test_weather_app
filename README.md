@@ -123,7 +123,8 @@ cache freshness, and formatting.
 | Module | Purpose |
 | --- | --- |
 | `app` | The application itself. |
-| `ui-weather-view` | Animated weather backgrounds, copied unmodified from [Breezy Weather](https://github.com/breezy-weather/breezy-weather) and used under the **GNU LGPL v3**. See `ui-weather-view/README.md` and `ui-weather-view/LICENSE`. |
+| `ui-weather-view` | Weather background gradients (the animation code is included but unused), copied unmodified from [Breezy Weather](https://github.com/breezy-weather/breezy-weather) and used under the **GNU LGPL v3**. See `ui-weather-view/README.md` and `ui-weather-view/LICENSE`. |
 
-The animation is controlled by **Settings → Appearance → Animated weather
-background**. It defaults to off on devices the system reports as low-RAM.
+The main screen shows a static gradient matching the current weather, with
+four see-through blocks on top. **Settings → Appearance → Weather background**
+switches it to a fixed blue gradient instead. Nothing is animated.

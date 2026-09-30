@@ -21,9 +21,10 @@ and this file is the simplest way to honour that.
 * Build script rewritten to plain AGP, because the original depends on
   Breezy's `buildSrc` convention plugins.
 
-* `IntervalComputer.kt`: the per-frame time step is capped at 100 ms, so a
-  stalled frame no longer resets every rain drop at once (which showed as
-  the animation stopping for a few seconds). This is the only source edit.
+No source file in `src/` has been modified. VN Weather currently uses only
+the static background gradients (`res/drawable*/weather_background_*.xml`)
+through `WeatherImplementorFactory.getBackgroundId()`; the animation classes
+are kept intact but unused.
 
 ## Upstream
 

@@ -20,6 +20,45 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
+    <!-- The four see-through blocks on the main screen share this. -->
+    <style name="GlassBlock">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:background">@drawable/bg_glass</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+    </style>
+
+    <!-- White text on glass. The soft shadow keeps it readable where a
+         daytime gradient turns pale. -->
+    <style name="OnGlass">
+        <item name="android:textColor">@color/on_glass_primary</item>
+        <item name="android:shadowColor">@color/text_shadow</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
+    <style name="OnGlass.Secondary">
+        <item name="android:textColor">@color/on_glass_secondary</item>
+    </style>
+
+    <style name="OnGlass.Rain">
+        <item name="android:textColor">@color/rain_on_glass</item>
+    </style>
+
+    <!-- Heading inside a glass block, e.g. "Next 24 hours". -->
+    <style name="GlassTitle" parent="OnGlass.Secondary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="DetailCell">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -36,7 +75,10 @@
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/on_blue_secondary</item>
+        <item name="android:textColor">@color/on_glass_secondary</item>
+        <item name="android:shadowColor">@color/text_shadow</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
     </style>
 
     <style name="DetailValue">
@@ -47,7 +89,10 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/on_blue_primary</item>
+        <item name="android:textColor">@color/on_glass_primary</item>
+        <item name="android:shadowColor">@color/text_shadow</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
     </style>
 
     <style name="SettingsHeader">

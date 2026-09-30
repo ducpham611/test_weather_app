@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Flat, fixed-size cell: cheap to inflate and rebind while scrolling. -->
+<!-- Flat, fixed-size cell: cheap to inflate and rebind while scrolling.
+     No horizontal padding on the root: the temperature line has to reach
+     both edges so neighbouring cells join up. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:minWidth="64dp"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:paddingStart="6dp"
-    android:paddingEnd="6dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
 
     <TextView
         android:id="@+id/textHour"
+        style="@style/OnGlass.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
         android:maxLines="1"
-        android:textSize="12sp"
-        android:textColor="?android:attr/textColorSecondary" />
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/imageIcon"
@@ -29,18 +31,29 @@
 
     <TextView
         android:id="@+id/textTemp"
+        style="@style/OnGlass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
         android:maxLines="1"
         android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textStyle="bold" />
+
+    <com.vnweather.app.ui.main.TemperatureLineView
+        android:id="@+id/tempLine"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp" />
 
     <TextView
         android:id="@+id/textRain"
+        style="@style/OnGlass.Rain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
         android:maxLines="1"
-        android:textSize="11sp"
-        android:textColor="@color/rain_blue" />
+        android:textSize="11sp" />
 </LinearLayout>
