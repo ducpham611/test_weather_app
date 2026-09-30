@@ -35,6 +35,16 @@ class IntervalComputer {
     fun invalidate() {
         mCurrentTime = System.currentTimeMillis()
         interval = (if (mLastTime == -1L) 0 else mCurrentTime - mLastTime).toDouble()
+            .coerceIn(0.0, MAX_INTERVAL_MS)
         mLastTime = mCurrentTime
+    }
+
+    private companion object {
+        /*
+         * VN Weather change: cap one frame's time step. After a stall every
+         * drop would jump past the bottom at once and respawn together above
+         * the screen, leaving seconds of empty sky before the rain returns.
+         */
+        const val MAX_INTERVAL_MS = 100.0
     }
 }

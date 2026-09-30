@@ -21,7 +21,9 @@ and this file is the simplest way to honour that.
 * Build script rewritten to plain AGP, because the original depends on
   Breezy's `buildSrc` convention plugins.
 
-No source file in `src/` has been modified.
+* `IntervalComputer.kt`: the per-frame time step is capped at 100 ms, so a
+  stalled frame no longer resets every rain drop at once (which showed as
+  the animation stopping for a few seconds). This is the only source edit.
 
 ## Upstream
 

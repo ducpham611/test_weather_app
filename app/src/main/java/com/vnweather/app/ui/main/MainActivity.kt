@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Choreographer
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -44,6 +46,44 @@ class MainActivity : AppCompatActivity() {
     /** Read once per resume; the Settings screen can flip it while we are away. */
     private var animatedBackground = false
     private var weatherView: MaterialWeatherView? = null
+
+    /**
+     * Keeps the animated background ticking every display frame.
+     *
+     * Breezy's painter re-arms itself with postInvalidate() from inside
+     * onDraw(); if a single frame is ever skipped (Samsung adaptive refresh,
+     * a busy main thread, the window briefly losing focus) the chain breaks
+     * and the rain freezes until something else redraws it. This callback
+     * nudges the painter each vsync so the loop can never die. Two
+     * invalidations in one frame collapse into one draw, so it costs nothing
+     * extra when the built-in loop is healthy.
+     */
+    private var driveFrames = false
+    private val frameDriver = object : Choreographer.FrameCallback {
+        override fun doFrame(frameTimeNanos: Long) {
+            if (!driveFrames) return
+            val view = weatherView ?: return
+            // Only while the animated area is actually on screen; below the
+            // current card everything sits on an opaque background.
+            if (binding.scrollView.scrollY < binding.currentCard.bottom) {
+                for (i in 0 until view.childCount) {
+                    ViewCompat.postInvalidateOnAnimation(view.getChildAt(i))
+                }
+            }
+            Choreographer.getInstance().postFrameCallback(this)
+        }
+    }
+
+    private fun startFrameDriver() {
+        if (weatherView == null || driveFrames) return
+        driveFrames = true
+        Choreographer.getInstance().postFrameCallback(frameDriver)
+    }
+
+    private fun stopFrameDriver() {
+        driveFrames = false
+        Choreographer.getInstance().removeFrameCallback(frameDriver)
+    }
 
     private val searchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -170,8 +210,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // onScroll drives the parallax; API 21 has no View.setOnScrollChangeListener.
+        // Skip until the view has been measured: before that Breezy divides
+        // by zero, the scroll rate becomes NaN and nothing is drawn at all.
         binding.scrollView.viewTreeObserver.addOnScrollChangedListener {
-            weatherView?.onScroll(binding.scrollView.scrollY)
+            weatherView?.let { view ->
+                if (view.height > 0) view.onScroll(binding.scrollView.scrollY)
+            }
         }
     }
 
@@ -404,12 +448,14 @@ class MainActivity : AppCompatActivity() {
             return
         }
         weatherView?.setDrawable(true)
+        startFrameDriver()
         viewModel.load()
     }
 
     override fun onPause() {
         super.onPause()
         // Never animate in the background; this is the main battery saver.
+        stopFrameDriver()
         weatherView?.setDrawable(false)
     }
 
