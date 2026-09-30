@@ -105,12 +105,22 @@
             </RadioGroup>
 
             <TextView style="@style/SettingsHeader" android:text="@string/appearance" />
-            <CheckBox
-                android:id="@+id/checkAnimatedBackground"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:text="@string/animated_background" />
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:text="@string/background_style" />
+            <RadioGroup
+                android:id="@+id/groupBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioButton android:id="@+id/radioBgBreezy" style="@style/SettingsRadio" android:text="@string/bg_breezy" />
+                <RadioButton android:id="@+id/radioBgVn" style="@style/SettingsRadio" android:text="@string/bg_vn" />
+                <RadioButton android:id="@+id/radioBgPlain" style="@style/SettingsRadio" android:text="@string/bg_plain" />
+            </RadioGroup>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

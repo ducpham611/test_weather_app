@@ -124,6 +124,9 @@
     <string name="error_api_key_rejected">The API key was rejected. Check it in Settings, or the free quota may be used up.</string>
     <string name="error_rate_limited">Too many requests to the provider. Wait a moment and pull down to refresh.</string>
     <string name="appearance">Appearance</string>
-    <string name="animated_background">Weather background</string>
-    <string name="animated_background_note">Colours the screen to match the current weather. When off, a plain blue background is used.</string>
+    <string name="background_style">Background</string>
+    <string name="bg_breezy">Weather colours (Breezy)</string>
+    <string name="bg_vn">Weather colours (VN Weather)</string>
+    <string name="bg_plain">Plain blue</string>
+    <string name="animated_background_note">Both weather options change colour with the current weather. Breezy uses brighter colours; VN Weather uses deeper colours that keep text easier to read.</string>
 </resources>

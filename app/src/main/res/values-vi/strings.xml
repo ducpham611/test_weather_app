@@ -124,6 +124,9 @@
     <string name="error_api_key_rejected">Khóa API bị từ chối. Hãy kiểm tra lại trong Cài đặt, hoặc hạn mức miễn phí đã hết.</string>
     <string name="error_rate_limited">Gọi nhà cung cấp quá nhiều lần. Hãy đợi một lát rồi kéo xuống để tải lại.</string>
     <string name="appearance">Giao diện</string>
-    <string name="animated_background">Nền theo thời tiết</string>
-    <string name="animated_background_note">Đổi màu nền theo thời tiết hiện tại. Khi tắt, dùng nền xanh cố định.</string>
+    <string name="background_style">Hình nền</string>
+    <string name="bg_breezy">Màu theo thời tiết (Breezy)</string>
+    <string name="bg_vn">Màu theo thời tiết (VN Weather)</string>
+    <string name="bg_plain">Xanh cố định</string>
+    <string name="animated_background_note">Cả hai tuỳ chọn thời tiết đều đổi màu theo thời tiết hiện tại. Breezy dùng màu sáng hơn; VN Weather dùng màu đậm hơn giúp chữ dễ đọc hơn.</string>
 </resources>

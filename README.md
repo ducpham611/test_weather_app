@@ -126,5 +126,7 @@ cache freshness, and formatting.
 | `ui-weather-view` | Weather background gradients (the animation code is included but unused), copied unmodified from [Breezy Weather](https://github.com/breezy-weather/breezy-weather) and used under the **GNU LGPL v3**. See `ui-weather-view/README.md` and `ui-weather-view/LICENSE`. |
 
 The main screen shows a static gradient matching the current weather, with
-four see-through blocks on top. **Settings → Appearance → Weather background**
-switches it to a fixed blue gradient instead. Nothing is animated.
+four see-through blocks on top. **Settings → Appearance → Background** offers
+Breezy's colours (default), VN Weather's own deeper colours, or plain blue.
+All are drawn by `SmoothGradientDrawable`, which blends along one smooth curve
+so there is no seam across the middle. Nothing is animated.

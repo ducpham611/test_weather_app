@@ -52,19 +52,24 @@ class SettingsStore(context: Context) {
         set(value) = prefs.edit().putString(KEY_LANGUAGE, value).apply()
 
     /**
-     * Weather-coloured background. It is a static gradient that costs
-     * nothing to draw, so it is on for every device. A new key on purpose:
-     * the old animated setting defaulted to off on low-RAM phones.
+     * Main-screen background: Breezy's colours, VN Weather's own colours, or
+     * plain blue. All are static gradients that cost nothing to draw.
+     * Someone who had unticked the older "Weather background" box keeps
+     * plain blue.
      */
-    var weatherBackground: Boolean
-        get() = prefs.getBoolean(KEY_WEATHER_BG, true)
-        set(value) = prefs.edit().putBoolean(KEY_WEATHER_BG, value).apply()
+    var backgroundStyle: String
+        get() = prefs.getString(KEY_BG_STYLE, null)
+            ?: if (prefs.getBoolean(KEY_WEATHER_BG, true)) BG_BREEZY else BG_PLAIN
+        set(value) = prefs.edit().putString(KEY_BG_STYLE, value).apply()
 
     var nightMode: Int
         get() = prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         set(value) = prefs.edit().putInt(KEY_NIGHT_MODE, value).apply()
 
     companion object {
+        const val BG_BREEZY = "breezy"
+        const val BG_VN = "vn"
+        const val BG_PLAIN = "plain"
         const val UNIT_CELSIUS = "celsius"
         const val UNIT_FAHRENHEIT = "fahrenheit"
         const val UNIT_KMH = "kmh"
@@ -93,5 +98,6 @@ class SettingsStore(context: Context) {
         private const val KEY_LANGUAGE = "language_tag"
         private const val KEY_TOMORROW_KEY = "tomorrow_api_key"
         private const val KEY_WEATHER_BG = "weather_background"
+        private const val KEY_BG_STYLE = "background_style"
     }
 }

@@ -22,9 +22,10 @@ and this file is the simplest way to honour that.
   Breezy's `buildSrc` convention plugins.
 
 No source file in `src/` has been modified. VN Weather currently uses only
-the static background gradients (`res/drawable*/weather_background_*.xml`)
-through `WeatherImplementorFactory.getBackgroundId()`; the animation classes
-are kept intact but unused.
+the weather-kind constants in `WeatherView` and the colours of the static
+background gradients (`res/drawable*/weather_background_*.xml`), which the app
+redraws with a smoother blend. The animation classes are kept intact but
+unused.
 
 ## Upstream
 

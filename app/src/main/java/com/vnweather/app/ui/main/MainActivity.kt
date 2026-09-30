@@ -4,8 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -20,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
+import com.vnweather.app.data.local.SettingsStore
 import com.vnweather.app.databinding.ActivityMainBinding
 import com.vnweather.app.domain.ErrorType
 import com.vnweather.app.domain.Forecast
@@ -31,7 +30,6 @@ import com.vnweather.app.ui.settings.SettingsActivity
 import com.vnweather.app.util.Formatters
 import com.vnweather.app.util.LocaleHelper
 import org.breezyweather.ui.theme.weatherView.WeatherView
-import org.breezyweather.ui.theme.weatherView.materialWeatherView.WeatherImplementorFactory
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -43,13 +41,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dailyList: DailyListRenderer
 
     /** Read once per resume; the Settings screen can flip it while we are away. */
-    private var weatherBackground = true
+    private var backgroundStyle = SettingsStore.BG_BREEZY
 
     /** Last conditions painted, so a re-render with the same weather is free. */
     private var backgroundCode: Int? = null
     private var backgroundIsDay = true
-    @androidx.annotation.DrawableRes
-    private var backgroundRes = 0
+    /** Identifies what is painted now: style + colours. */
+    private var backgroundKey: String? = null
 
     private val searchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -124,31 +122,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Static weather background: Breezy Weather's gradient for the current
-     * conditions (ui-weather-view, LGPL-3.0), with no animation at all.
+     * Static weather background, no animation.
+     *
+     * Settings offers Breezy Weather's colours (ui-weather-view, LGPL-3.0),
+     * VN Weather's own deeper colours, or plain blue. Every option is drawn
+     * by SmoothGradientDrawable, which blends along one smooth curve, so
+     * there is no seam across the middle of the screen.
      *
      * The gradient fills the whole screen, including behind the transparent
-     * status bar, and the four glass blocks sit on top of it. A light dark
-     * wash over the gradient keeps white text readable: several of Breezy's
-     * daytime gradients fade to almost white at the bottom.
+     * status bar. A dark wash on top keeps white text readable; Breezy needs
+     * more of it, because several of its daytime gradients fade to almost
+     * white.
      */
     private fun setupBackground() {
-        weatherBackground = (application as WeatherApp).settings.weatherBackground
+        backgroundStyle = (application as WeatherApp).settings.backgroundStyle
         window.statusBarColor = android.graphics.Color.TRANSPARENT
         @Suppress("DEPRECATION")
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         applyBackground(backgroundCode, backgroundIsDay)
-
-        // Same glass drawable on every block; one instance each, since a
-        // Drawable keeps its own bounds.
-        listOf(
-            binding.errorGroup,
-            binding.currentCard,
-            binding.detailRow,
-            binding.hourlyBlock,
-            binding.dailyBlock
-        ).forEach { it.background = GlassDrawable(this) }
     }
 
     private fun applyBackground(code: Int?, isDay: Boolean) {
@@ -157,19 +149,35 @@ class MainActivity : AppCompatActivity() {
 
         val kind = code?.let { WeatherBackgroundMapper.weatherKind(it) }
             ?: WeatherView.WEATHER_KIND_NULL
-        val res = if (weatherBackground && kind != WeatherView.WEATHER_KIND_NULL) {
-            WeatherImplementorFactory.getBackgroundId(kind, isDay)
-        } else {
-            // Breezy's "default" is fully transparent, so use our own blue.
-            R.drawable.bg_screen_default
-        }
-        if (res == backgroundRes) return
-        backgroundRes = res
+        val darkUi = isNightMode()
 
-        val gradient = ContextCompat.getDrawable(this, res) ?: return
-        val wash = ColorDrawable(ContextCompat.getColor(this, R.color.background_wash))
-        binding.root.background = LayerDrawable(arrayOf(gradient, wash))
+        val weatherColors = when (backgroundStyle) {
+            SettingsStore.BG_BREEZY -> BackgroundPalette.breezy(kind, isDay, darkUi)
+            SettingsStore.BG_VN -> BackgroundPalette.vn(kind, isDay)
+            else -> null
+        }
+        val colors = weatherColors ?: intArrayOf(
+            ContextCompat.getColor(this, R.color.default_sky_top),
+            ContextCompat.getColor(this, R.color.default_sky_bottom)
+        )
+        val wash = ContextCompat.getColor(
+            this,
+            if (weatherColors != null && backgroundStyle == SettingsStore.BG_VN) {
+                R.color.background_wash_vn
+            } else {
+                R.color.background_wash
+            }
+        )
+
+        val key = backgroundStyle + ":" + colors.joinToString(",") + ":" + wash
+        if (key == backgroundKey) return
+        backgroundKey = key
+        binding.root.background = SmoothGradientDrawable(colors, wash)
     }
+
+    private fun isNightMode(): Boolean =
+        resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+            Configuration.UI_MODE_NIGHT_YES
 
     private fun setupLists() {
         binding.recyclerHourly.apply {
@@ -382,15 +390,17 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         applyFontScaleLayout()
+        // Breezy has separate colours for the dark theme.
+        applyBackground(backgroundCode, backgroundIsDay)
     }
 
     override fun onResume() {
         super.onResume()
         // Settings (units / language / background) may have changed while we
         // were away. The background is only a drawable swap, so no recreate.
-        val wanted = (application as WeatherApp).settings.weatherBackground
-        if (wanted != weatherBackground) {
-            weatherBackground = wanted
+        val wanted = (application as WeatherApp).settings.backgroundStyle
+        if (wanted != backgroundStyle) {
+            backgroundStyle = wanted
             applyBackground(backgroundCode, backgroundIsDay)
         }
         viewModel.load()

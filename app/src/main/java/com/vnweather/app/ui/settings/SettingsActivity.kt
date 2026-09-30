@@ -154,11 +154,21 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupAnimatedBackground() {
-        binding.checkAnimatedBackground.isChecked = settings.weatherBackground
-        binding.checkAnimatedBackground.setOnCheckedChangeListener { _, checked ->
+        binding.groupBackground.check(
+            when (settings.backgroundStyle) {
+                SettingsStore.BG_VN -> R.id.radioBgVn
+                SettingsStore.BG_PLAIN -> R.id.radioBgPlain
+                else -> R.id.radioBgBreezy
+            }
+        )
+        binding.groupBackground.setOnCheckedChangeListener { _, id ->
             // MainActivity re-reads this in onResume and swaps the
             // background, so the change is visible as soon as you go back.
-            settings.weatherBackground = checked
+            settings.backgroundStyle = when (id) {
+                R.id.radioBgVn -> SettingsStore.BG_VN
+                R.id.radioBgPlain -> SettingsStore.BG_PLAIN
+                else -> SettingsStore.BG_BREEZY
+            }
         }
     }
 

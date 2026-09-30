@@ -98,7 +98,7 @@
                         style="@style/GlassBlock"
                         android:layout_marginTop="4dp"
                         android:gravity="center_horizontal"
-                        android:paddingBottom="22dp">
+                        android:paddingBottom="18dp">
 
                         <LinearLayout
                             android:id="@+id/headerCity"
@@ -188,7 +188,7 @@
                         android:orientation="horizontal"
                         android:baselineAligned="false"
                         android:paddingTop="12dp"
-                        android:paddingBottom="16dp">
+                        android:paddingBottom="12dp">
 
                         <LinearLayout style="@style/DetailCell">
                             <TextView style="@style/DetailLabel" android:text="@string/humidity" />
