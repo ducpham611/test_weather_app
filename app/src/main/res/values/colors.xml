@@ -20,8 +20,12 @@
     <color name="on_blue_secondary">#CCFFFFFF</color>
     <color name="pill_surface">#FFFFFFFF</color>
     <!-- Glass UI over the weather background -->
-    <color name="background_wash">#40000000</color>
-    <color name="glass_fill">#4D000000</color>
+    <color name="background_wash">#4D000000</color>
+    <color name="glass_fill">#3D000000</color>
+    <color name="glass_sheen">#1FFFFFFF</color>
+    <color name="glass_rim_bright">#B3FFFFFF</color>
+    <color name="glass_rim_faint">#26FFFFFF</color>
+    <color name="glass_shadow">#12000000</color>
     <color name="glass_stroke">#40FFFFFF</color>
     <color name="glass_pill">#33FFFFFF</color>
     <color name="glass_divider">#26FFFFFF</color>

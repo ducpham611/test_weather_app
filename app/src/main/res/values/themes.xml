@@ -28,7 +28,8 @@
         <item name="android:background">@drawable/bg_glass</item>
         <item name="android:orientation">vertical</item>
         <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingBottom">14dp</item>
+        <!-- 14dp plus the 4dp GlassDrawable keeps free for its shadow. -->
+        <item name="android:paddingBottom">18dp</item>
     </style>
 
     <!-- White text on glass. The soft shadow keeps it readable where a

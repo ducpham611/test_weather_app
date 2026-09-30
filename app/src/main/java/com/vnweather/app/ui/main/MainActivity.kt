@@ -139,6 +139,16 @@ class MainActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         applyBackground(backgroundCode, backgroundIsDay)
+
+        // Same glass drawable on every block; one instance each, since a
+        // Drawable keeps its own bounds.
+        listOf(
+            binding.errorGroup,
+            binding.currentCard,
+            binding.detailRow,
+            binding.hourlyBlock,
+            binding.dailyBlock
+        ).forEach { it.background = GlassDrawable(this) }
     }
 
     private fun applyBackground(code: Int?, isDay: Boolean) {
