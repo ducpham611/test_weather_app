@@ -128,5 +128,6 @@
     <string name="bg_breezy">Màu theo thời tiết (Breezy)</string>
     <string name="bg_vn">Màu theo thời tiết (VN Weather)</string>
     <string name="bg_plain">Xanh cố định</string>
-    <string name="animated_background_note">Cả hai tuỳ chọn thời tiết đều đổi màu theo thời tiết hiện tại. Breezy dùng màu sáng hơn; VN Weather dùng màu đậm hơn giúp chữ dễ đọc hơn.</string>
+    <string name="bg_simple">Đơn giản (sáng / tối)</string>
+    <string name="animated_background_note">Cả hai tuỳ chọn thời tiết đều đổi màu theo thời tiết hiện tại. Breezy dùng màu sáng hơn; VN Weather dùng màu đậm hơn giúp chữ dễ đọc hơn. Đơn giản dùng thẻ màu đặc, theo cài đặt Giao diện.</string>
 </resources>

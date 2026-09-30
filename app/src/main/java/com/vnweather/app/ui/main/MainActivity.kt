@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
@@ -49,6 +50,9 @@ class MainActivity : AppCompatActivity() {
     /** Identifies what is painted now: style + colours. */
     private var backgroundKey: String? = null
 
+    /** Non-null only for the "Simple (light / dark)" background option. */
+    private var simpleStyle: SimpleStyle? = null
+
     private val searchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -79,8 +83,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         applyFontScaleLayout()
+        setupLists()        // before setupBackground: Simple styles the lists
         setupBackground()
-        setupLists()
         setupActions()
         observe()
 
@@ -140,12 +144,62 @@ class MainActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        applyBackground(backgroundCode, backgroundIsDay)
+        if (backgroundStyle == SettingsStore.BG_SIMPLE) {
+            setupSimpleStyle()
+        } else {
+            applyBackground(backgroundCode, backgroundIsDay)
+        }
+    }
+
+    /**
+     * "Simple (light / dark)": solid background and solid blue-grey cards,
+     * following the Theme setting through values / values-night colours.
+     * None of this touches the three gradient options.
+     */
+    private fun setupSimpleStyle() {
+        val style = SimpleStyle(this)
+        simpleStyle = style
+
+        binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.simple_background))
+        listOf(
+            binding.errorGroup,
+            binding.currentCard,
+            binding.detailRow,
+            binding.hourlyBlock,
+            binding.dailyBlock
+        ).forEach { it.setBackgroundResource(R.drawable.bg_simple_card) }
+        binding.buttonShowMore.setBackgroundResource(R.drawable.bg_simple_pill)
+
+        style.restyle(binding.contentGroup)
+        style.restyle(binding.errorGroup)
+        (binding.buttonRetry as? com.google.android.material.button.MaterialButton)?.strokeColor =
+            android.content.res.ColorStateList.valueOf(style.primary)
+
+        binding.toolbar.setTitleTextColor(style.primary)
+        binding.toolbar.overflowIcon?.mutate()?.setTint(style.primary)
+
+        hourlyAdapter.simpleStyle = style
+        dailyList.simpleStyle = style
+
+        // Dark status / navigation bar icons on the light theme.
+        if (!isNightMode()) {
+            if (android.os.Build.VERSION.SDK_INT >= 23) {
+                WindowInsetsControllerCompat(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = true
+                    isAppearanceLightNavigationBars = true
+                }
+            } else {
+                // API 21-22 cannot draw dark status icons; a light scrim keeps
+                // the white ones visible on the pale background.
+                window.statusBarColor = ContextCompat.getColor(this, R.color.simple_status_scrim)
+            }
+        }
     }
 
     private fun applyBackground(code: Int?, isDay: Boolean) {
         backgroundCode = code
         backgroundIsDay = isDay
+        if (backgroundStyle == SettingsStore.BG_SIMPLE) return
 
         val kind = code?.let { WeatherBackgroundMapper.weatherKind(it) }
             ?: WeatherView.WEATHER_KIND_NULL
@@ -375,6 +429,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        simpleStyle?.let { style ->
+            for (i in 0 until menu.size()) {
+                menu.getItem(i).icon?.mutate()?.setTint(style.primary)
+            }
+        }
         return true
     }
 
@@ -399,6 +458,13 @@ class MainActivity : AppCompatActivity() {
         // Settings (units / language / background) may have changed while we
         // were away. The background is only a drawable swap, so no recreate.
         val wanted = (application as WeatherApp).settings.backgroundStyle
+        val simpleChanged =
+            (wanted == SettingsStore.BG_SIMPLE) != (backgroundStyle == SettingsStore.BG_SIMPLE)
+        if (simpleChanged) {
+            // Switching to or from Simple restyles every view; start clean.
+            recreate()
+            return
+        }
         if (wanted != backgroundStyle) {
             backgroundStyle = wanted
             applyBackground(backgroundCode, backgroundIsDay)

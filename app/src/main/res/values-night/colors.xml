@@ -4,4 +4,12 @@
     <color name="card_surface">#FF1E2430</color>
     <color name="card_blue">#FF1B4F96</color>
     <color name="pill_surface">#FF1E2430</color>
+    <color name="simple_background">#FF171922</color>
+    <color name="simple_card">#FF21242F</color>
+    <color name="simple_highlight">#FF383B57</color>
+    <color name="simple_pill">#FF2C3040</color>
+    <color name="simple_text_primary">#FFE6E8F1</color>
+    <color name="simple_text_secondary">#FFA6ABBE</color>
+    <color name="simple_rain">#FF8AB4F8</color>
+    <color name="simple_line">#FFA3A8BD</color>
 </resources>

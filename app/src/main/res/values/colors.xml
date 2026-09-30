@@ -34,4 +34,15 @@
     <color name="text_shadow">#66000000</color>
     <color name="default_sky_top">#FF3F83D6</color>
     <color name="default_sky_bottom">#FF78AEEB</color>
+    <!-- "Simple" background option (Rain-style solid cards), light theme.
+         Dark-theme values are in values-night/colors.xml. -->
+    <color name="simple_background">#FFE9EDF5</color>
+    <color name="simple_card">#FFF9FAFE</color>
+    <color name="simple_highlight">#FFDCE3F4</color>
+    <color name="simple_pill">#FFE4E9F4</color>
+    <color name="simple_text_primary">#FF1B1E28</color>
+    <color name="simple_text_secondary">#FF5B6174</color>
+    <color name="simple_rain">#FF2A6FD6</color>
+    <color name="simple_line">#FF8A91A6</color>
+    <color name="simple_status_scrim">#33000000</color>
 </resources>

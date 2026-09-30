@@ -25,6 +25,9 @@ class DailyListRenderer(private val container: LinearLayout) {
 
     var temperatureUnit: String = "celsius"
 
+    /** Set by MainActivity for the "Simple" background option only. */
+    var simpleStyle: SimpleStyle? = null
+
     fun render(days: List<DailyItem>) {
         // Reuse rows already inflated; add or trim only the difference.
         while (container.childCount > days.size) {
@@ -33,6 +36,7 @@ class DailyListRenderer(private val container: LinearLayout) {
         while (container.childCount < days.size) {
             val binding = ItemDailyBinding.inflate(inflater, container, false)
             binding.root.tag = binding
+            simpleStyle?.restyle(binding.root)
             container.addView(binding.root)
         }
 

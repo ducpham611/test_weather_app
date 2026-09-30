@@ -24,6 +24,9 @@ class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
 
     var temperatureUnit: String = "celsius"
 
+    /** Set by MainActivity for the "Simple" background option only. */
+    var simpleStyle: SimpleStyle? = null
+
     /** Coldest and warmest hour in the list, the temperature line's scale. */
     private var minTemp = 0.0
     private var maxTemp = 0.0
@@ -46,6 +49,7 @@ class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
         val binding = ItemHourlyBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
+        simpleStyle?.restyle(binding.root)
         return VH(binding)
     }
 
@@ -67,6 +71,11 @@ class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
 
         fun bind(item: HourlyItem, isFirst: Boolean) {
             val context = binding.root.context
+
+            // Simple option only: the current hour sits on a highlighted pill.
+            if (simpleStyle != null) {
+                binding.root.setBackgroundResource(if (isFirst) R.drawable.bg_simple_hour else 0)
+            }
             val locale = LocaleHelper.currentLocale()
 
             binding.textHour.text = if (isFirst) {

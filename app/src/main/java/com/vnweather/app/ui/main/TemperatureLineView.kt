@@ -46,6 +46,12 @@ class TemperatureLineView @JvmOverloads constructor(
     private var min = 0.0
     private var max = 0.0
 
+    fun setColors(line: Int, dot: Int) {
+        linePaint.color = line
+        dotPaint.color = dot
+        invalidate()
+    }
+
     fun setTemperatures(previous: Double?, current: Double, next: Double?, min: Double, max: Double) {
         this.previous = previous
         this.current = current

@@ -52,8 +52,9 @@ class SettingsStore(context: Context) {
         set(value) = prefs.edit().putString(KEY_LANGUAGE, value).apply()
 
     /**
-     * Main-screen background: Breezy's colours, VN Weather's own colours, or
-     * plain blue. All are static gradients that cost nothing to draw.
+     * Main-screen background: Breezy's colours, VN Weather's own colours,
+     * plain blue, or "simple" (solid light / dark cards in the style of the
+     * Rain weather app, following the Theme setting). All are static gradients that cost nothing to draw.
      * Someone who had unticked the older "Weather background" box keeps
      * plain blue.
      */
@@ -70,6 +71,7 @@ class SettingsStore(context: Context) {
         const val BG_BREEZY = "breezy"
         const val BG_VN = "vn"
         const val BG_PLAIN = "plain"
+        const val BG_SIMPLE = "simple"
         const val UNIT_CELSIUS = "celsius"
         const val UNIT_FAHRENHEIT = "fahrenheit"
         const val UNIT_KMH = "kmh"

@@ -158,6 +158,7 @@ class SettingsActivity : AppCompatActivity() {
             when (settings.backgroundStyle) {
                 SettingsStore.BG_VN -> R.id.radioBgVn
                 SettingsStore.BG_PLAIN -> R.id.radioBgPlain
+                SettingsStore.BG_SIMPLE -> R.id.radioBgSimple
                 else -> R.id.radioBgBreezy
             }
         )
@@ -167,6 +168,7 @@ class SettingsActivity : AppCompatActivity() {
             settings.backgroundStyle = when (id) {
                 R.id.radioBgVn -> SettingsStore.BG_VN
                 R.id.radioBgPlain -> SettingsStore.BG_PLAIN
+                R.id.radioBgSimple -> SettingsStore.BG_SIMPLE
                 else -> SettingsStore.BG_BREEZY
             }
         }

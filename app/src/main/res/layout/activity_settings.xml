@@ -120,6 +120,7 @@
                 <RadioButton android:id="@+id/radioBgBreezy" style="@style/SettingsRadio" android:text="@string/bg_breezy" />
                 <RadioButton android:id="@+id/radioBgVn" style="@style/SettingsRadio" android:text="@string/bg_vn" />
                 <RadioButton android:id="@+id/radioBgPlain" style="@style/SettingsRadio" android:text="@string/bg_plain" />
+                <RadioButton android:id="@+id/radioBgSimple" style="@style/SettingsRadio" android:text="@string/bg_simple" />
             </RadioGroup>
             <TextView
                 android:layout_width="match_parent"

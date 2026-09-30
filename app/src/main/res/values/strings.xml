@@ -128,5 +128,6 @@
     <string name="bg_breezy">Weather colours (Breezy)</string>
     <string name="bg_vn">Weather colours (VN Weather)</string>
     <string name="bg_plain">Plain blue</string>
-    <string name="animated_background_note">Both weather options change colour with the current weather. Breezy uses brighter colours; VN Weather uses deeper colours that keep text easier to read.</string>
+    <string name="bg_simple">Simple (light / dark)</string>
+    <string name="animated_background_note">Both weather options change colour with the current weather. Breezy uses brighter colours; VN Weather uses deeper colours that keep text easier to read. Simple uses solid cards that follow the Theme setting.</string>
 </resources>
