@@ -50,6 +50,14 @@ object Diagnostics {
 
         out.appendLine("Connectivity flag: ${NetworkMonitor.isOnline(context)}")
         out.appendLine("Conscrypt (modern TLS): ${if (app.conscryptInstalled) "installed" else "NOT installed"}")
+        NetworkModule.rawClient // builds the client, which decides on bundled roots
+        out.appendLine(
+            "Bundled Let's Encrypt roots: " + when {
+                !BundledRoots.needed -> "not needed (Android 7.1.1+ has them)"
+                NetworkModule.bundledRootsActive -> "active (${BundledRoots.NAMES.joinToString()})"
+                else -> "FAILED to load - Open-Meteo / WAQI may be rejected"
+            }
+        )
 
         val proxy = System.getProperty("http.proxyHost")
         out.appendLine("System proxy: ${if (proxy.isNullOrBlank()) "none" else "$proxy:${System.getProperty("http.proxyPort")}"}")

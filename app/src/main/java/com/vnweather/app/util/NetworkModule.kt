@@ -17,11 +17,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import java.io.IOException
-import java.security.KeyStore
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
 /**
  * Single shared OkHttp client plus the two Retrofit services.
@@ -85,30 +82,38 @@ object NetworkModule {
 
         if (BuildConfig.DEBUG) builder.addInterceptor(LogInterceptor)
 
-        // On API 21 TLS 1.2 exists but is off by default. Turn it on when
-        // Conscrypt is not doing it for us.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-            enableTls12(builder)
-        }
+        // Android 5.0 - 7.0 do not trust Let's Encrypt (Open-Meteo, WAQI), so
+        // the app brings those roots itself. On API 21 TLS 1.2 is also off by
+        // default and is switched on here.
+        if (BundledRoots.needed) configureLegacyTls(builder)
 
         return builder.build()
     }
 
-    private fun enableTls12(builder: OkHttpClient.Builder) {
+    /** Whether the bundled Let's Encrypt roots are in use; shown in diagnostics. */
+    var bundledRootsActive: Boolean = false
+        private set
+
+    private fun configureLegacyTls(builder: OkHttpClient.Builder) {
+        val trustManager = runCatching { BundledRoots.trustManager() }
+            .onFailure { Log.w(TAG, "Bundled roots unavailable, using system trust only", it) }
+            .getOrNull()
+        bundledRootsActive = trustManager != null
+
         runCatching {
-            val trustManagerFactory = TrustManagerFactory.getInstance(
-                TrustManagerFactory.getDefaultAlgorithm()
-            ).apply { init(null as KeyStore?) }
-
-            val trustManager = trustManagerFactory.trustManagers
-                .filterIsInstance<X509TrustManager>()
-                .first()
-
-            val sslContext = SSLContext.getInstance("TLSv1.2").apply { init(null, null, null) }
-            builder.sslSocketFactory(Tls12SocketFactory(sslContext.socketFactory), trustManager)
-            Log.i(TAG, "TLS 1.2 enabled explicitly for API ${Build.VERSION.SDK_INT}")
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                val tm = trustManager ?: BundledRoots.systemTrustManager()
+                val sslContext = SSLContext.getInstance("TLSv1.2").apply { init(null, arrayOf(tm), null) }
+                builder.sslSocketFactory(Tls12SocketFactory(sslContext.socketFactory), tm)
+                Log.i(TAG, "TLS 1.2 enabled explicitly for API ${Build.VERSION.SDK_INT}")
+            } else if (trustManager != null) {
+                val sslContext = SSLContext.getInstance("TLS").apply { init(null, arrayOf(trustManager), null) }
+                builder.sslSocketFactory(sslContext.socketFactory, trustManager)
+            }
+            if (trustManager != null) Log.i(TAG, "Bundled Let's Encrypt roots enabled")
         }.onFailure {
-            Log.w(TAG, "Could not force TLS 1.2", it)
+            bundledRootsActive = false
+            Log.w(TAG, "Could not configure legacy TLS", it)
         }
     }
 

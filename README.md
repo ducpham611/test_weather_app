@@ -153,3 +153,14 @@ Two blocks under "Upcoming days":
 
 Both load independently of the forecast and are cached per location (AQI 30 min,
 UV 3 h), so a failure only affects its own block. Diagnostics (Settings) tests both.
+
+## Android 5.0 – 7.0: bundled Let's Encrypt roots
+
+Open-Meteo (forecast + air quality) and WAQI use Let's Encrypt certificates that
+chain to ISRG Root X1, which Android only added in 7.1.1 (API 25). On API 21–24 the
+app therefore trusts the official Let's Encrypt roots (ISRG Root X1, X2, YR, YE,
+from https://letsencrypt.org/certificates/) **in addition to** the system store, for
+its own connections only (`util/BundledRoots.kt`, wired in `NetworkModule`).
+System trust is checked first; normal chain and host-name validation still apply.
+API 25+ is unchanged. `BundledRootsTest` checks the published SHA-256 fingerprints.
+Settings → Diagnostics shows whether the bundled roots are active.
