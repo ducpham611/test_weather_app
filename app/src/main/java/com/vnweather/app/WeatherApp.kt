@@ -54,6 +54,7 @@ class WeatherApp : Application() {
             context = this,
             waqiApi = NetworkModule.waqiApi,
             uvApi = NetworkModule.uvIndexApi,
+            openMeteoAirApi = NetworkModule.openMeteoAirApi,
             settings = settings
         )
 

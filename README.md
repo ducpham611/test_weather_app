@@ -142,6 +142,10 @@ Two blocks under "Upcoming days":
   https://aqicn.org/data-platform/token/). WAQI terms: free for non-commercial use,
   attribution to WAQI and the originating agency is shown in the block; the data may
   not be redistributed or used in a paid app.
+- **Air quality, alternative source** – Settings → *Air quality data source* →
+  [Open-Meteo Air Quality API](https://open-meteo.com/en/docs/air-quality-api)
+  (CAMS global model, ~45 km grid, no key, CC BY 4.0). Uses the **US AQI**
+  (`us_aqi`); the main pollutant is the largest `us_aqi_*` sub-index.
 - **UV index** – [UV Index API](https://uvindexapi.com) (NOAA data, no key,
   1,000 requests/day/IP, updated once a day). Licensed CC BY-SA 4.0; the block shows
   a visible link to uvindexapi.com. Shows the current hour's UV, its WHO category

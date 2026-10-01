@@ -173,4 +173,10 @@
     <string name="waqi_token">Mã token chất lượng không khí (WAQI)</string>
     <string name="waqi_token_hint">Dán mã token WAQI</string>
     <string name="waqi_token_note">Miễn phí cho cá nhân. Lấy token tại aqicn.org/data-platform/token (chỉ cần email), dán vào đây rồi kéo xuống để làm mới. Chạm vào đây để mở trang đăng ký.</string>
+    <string name="aqi_source_setting">Nguồn dữ liệu chất lượng không khí</string>
+    <string name="aqi_source_waqi">WAQI – trạm quan trắc gần nhất (cần token miễn phí)</string>
+    <string name="aqi_source_om">Open-Meteo – mô hình CAMS, US AQI (không cần khóa)</string>
+    <string name="aqi_source_note">WAQI hiển thị số đo thực tế từ trạm gần nhất, có thể cách xa các thị trấn nhỏ. Open-Meteo ước tính chỉ số US AQI cho mọi vị trí từ mô hình toàn cầu CAMS (lưới ~45 km).</string>
+    <string name="aqi_source_open_meteo">Nguồn: Open-Meteo.com (CAMS) · CC BY 4.0</string>
+    <string name="aqi_model_open_meteo">Ước tính từ mô hình toàn cầu CAMS (lưới ~45 km)</string>
 </resources>

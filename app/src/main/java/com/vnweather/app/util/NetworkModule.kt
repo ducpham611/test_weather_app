@@ -58,6 +58,11 @@ object NetworkModule {
         buildRetrofit(WaqiApi.BASE_URL).create(WaqiApi::class.java)
     }
 
+    val openMeteoAirApi: com.vnweather.app.data.remote.OpenMeteoAirApi by lazy {
+        buildRetrofit(com.vnweather.app.data.remote.OpenMeteoAirApi.BASE_URL)
+            .create(com.vnweather.app.data.remote.OpenMeteoAirApi::class.java)
+    }
+
     val uvIndexApi: UvIndexApi by lazy {
         buildRetrofit(UvIndexApi.BASE_URL).create(UvIndexApi::class.java)
     }

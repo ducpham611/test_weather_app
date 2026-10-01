@@ -2,6 +2,7 @@ package com.vnweather.app.data
 
 import android.content.Context
 import com.vnweather.app.data.local.SettingsStore
+import com.vnweather.app.data.remote.OpenMeteoAirApi
 import com.vnweather.app.data.remote.UvIndexApi
 import com.vnweather.app.data.remote.WaqiApi
 import com.vnweather.app.domain.AirQuality
@@ -31,6 +32,7 @@ class AirUvRepository(
     context: Context,
     private val waqiApi: WaqiApi,
     private val uvApi: UvIndexApi,
+    private val openMeteoAirApi: OpenMeteoAirApi,
     private val settings: SettingsStore
 ) {
 
@@ -39,10 +41,23 @@ class AirUvRepository(
 
     suspend fun airQuality(city: City, forceRefresh: Boolean): ExtraState<AirQuality> =
         withContext(Dispatchers.IO) {
+            if (settings.aqiSource == SettingsStore.AQI_OPEN_METEO) {
+                return@withContext load(
+                    file = airFile(city),
+                    serializer = AirQuality.serializer(),
+                    maxAgeMinutes = AQI_MAX_AGE_MIN,
+                    forceRefresh = forceRefresh,
+                    fetchedAt = { it.fetchedAtMillis }
+                ) { now ->
+                    AirUvParser.parseOpenMeteoAir(
+                        openMeteoAirApi.current(city.latitude, city.longitude).string(), now
+                    )
+                }
+            }
             val token = settings.waqiToken
             if (token.isBlank()) return@withContext ExtraState.Failed(ExtraError.NO_TOKEN)
             load(
-                file = fileFor("aqi", city),
+                file = airFile(city),
                 serializer = AirQuality.serializer(),
                 maxAgeMinutes = AQI_MAX_AGE_MIN,
                 forceRefresh = forceRefresh,
@@ -67,7 +82,11 @@ class AirUvRepository(
         }
 
     /** Cached copy without any network, for an instant first paint. */
-    fun cachedAir(city: City): AirQuality? = read(fileFor("aqi", city), AirQuality.serializer())
+    fun cachedAir(city: City): AirQuality? = read(airFile(city), AirQuality.serializer())
+
+    /** One cache per AQI source, so switching never shows the other one's number. */
+    private fun airFile(city: City): File =
+        fileFor(if (settings.aqiSource == SettingsStore.AQI_OPEN_METEO) "aqi-om" else "aqi", city)
 
     fun cachedUv(city: City): UvForecast? = read(fileFor("uv", city), UvForecast.serializer())
 

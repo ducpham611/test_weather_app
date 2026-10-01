@@ -33,7 +33,9 @@ data class AirQuality(
     val measuredAtIso: String? = null,
     /** Originating agencies, WAQI itself excluded. Their ToS requires credit. */
     val sources: List<String> = emptyList(),
-    val fetchedAtMillis: Long = 0L
+    val fetchedAtMillis: Long = 0L,
+    /** Which provider produced this reading: SettingsStore.AQI_WAQI or AQI_OPEN_METEO. */
+    val provider: String = "waqi"
 )
 
 /** UV index forecast from uvindexapi.com (NOAA data, CC BY-SA 4.0). */
@@ -147,6 +149,63 @@ object AirUvParser {
             sources = sources,
             fetchedAtMillis = fetchedAtMillis
         )
+    }
+
+    /** Open-Meteo `us_aqi_*` sub-index fields and the WAQI-style key each maps to. */
+    val OPEN_METEO_SUB_INDICES = linkedMapOf(
+        "us_aqi_pm2_5" to "pm25",
+        "us_aqi_pm10" to "pm10",
+        "us_aqi_ozone" to "o3",
+        "us_aqi_nitrogen_dioxide" to "no2",
+        "us_aqi_sulphur_dioxide" to "so2",
+        "us_aqi_carbon_monoxide" to "co"
+    )
+
+    /**
+     * Open-Meteo Air Quality API (CAMS global model). The overall US AQI is
+     * the highest pollutant sub-index, so the dominant pollutant is whichever
+     * sub-index is largest.
+     */
+    fun parseOpenMeteoAir(body: String, fetchedAtMillis: Long): AirQuality {
+        val root = runCatching { json.parseToJsonElement(body) as JsonObject }.getOrNull()
+            ?: throw ExtraException(ExtraError.NO_DATA, "Unreadable Open-Meteo air quality response")
+        if ((root["error"] as? JsonPrimitive)?.contentOrNull == "true") {
+            throw ExtraException(ExtraError.NO_DATA, "Open-Meteo: ${root.str("reason") ?: "error"}")
+        }
+        val current = root["current"] as? JsonObject
+            ?: throw ExtraException(ExtraError.NO_DATA, "Open-Meteo: no current air quality")
+        fun num(key: String) = (current[key] as? JsonPrimitive)?.doubleOrNull
+        val aqi = num("us_aqi")?.roundToInt()
+            ?: throw ExtraException(ExtraError.NO_DATA, "Open-Meteo: us_aqi is null here")
+
+        val dominant = OPEN_METEO_SUB_INDICES.entries
+            .mapNotNull { (field, key) -> num(field)?.let { key to it } }
+            .maxByOrNull { it.second }
+            ?.first
+
+        // "2026-10-01T17:00" is local time; append the offset so it reads
+        // the same way as a WAQI timestamp.
+        val time = current.str("time")
+        val offsetSeconds = (root["utc_offset_seconds"] as? JsonPrimitive)?.doubleOrNull?.toInt() ?: 0
+        val iso = time?.let { if (it.length == 16) "$it:00${offsetLabel(offsetSeconds)}" else it }
+
+        return AirQuality(
+            aqi = aqi,
+            dominantPollutant = dominant,
+            stationName = "",
+            stationLatitude = (root["latitude"] as? JsonPrimitive)?.doubleOrNull,
+            stationLongitude = (root["longitude"] as? JsonPrimitive)?.doubleOrNull,
+            measuredAtIso = iso,
+            sources = emptyList(),
+            fetchedAtMillis = fetchedAtMillis,
+            provider = "open_meteo"
+        )
+    }
+
+    internal fun offsetLabel(seconds: Int): String {
+        val sign = if (seconds < 0) "-" else "+"
+        val abs = kotlin.math.abs(seconds)
+        return String.format(java.util.Locale.US, "%s%02d:%02d", sign, abs / 3600, (abs % 3600) / 60)
     }
 
     fun parseUv(body: String, fetchedAtMillis: Long): UvForecast {

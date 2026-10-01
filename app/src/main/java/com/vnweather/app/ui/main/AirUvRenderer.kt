@@ -8,6 +8,7 @@ import android.net.Uri
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.vnweather.app.R
+import com.vnweather.app.data.remote.OpenMeteoAirApi
 import com.vnweather.app.data.remote.UvIndexApi
 import com.vnweather.app.data.remote.WaqiApi
 import com.vnweather.app.databinding.ActivityMainBinding
@@ -36,6 +37,7 @@ import kotlin.math.roundToInt
  */
 class AirUvRenderer(
     private val binding: ActivityMainBinding,
+    private val isOpenMeteoSelected: () -> Boolean,
     private val openSettings: () -> Unit
 ) {
 
@@ -44,14 +46,18 @@ class AirUvRenderer(
     init {
         binding.textUvSource.setText(R.string.uv_source)
         binding.textUvSource.setOnClickListener { openUrl(UvIndexApi.SITE_URL) }
-        binding.textAqiSource.setOnClickListener { openUrl(WaqiApi.SITE_URL) }
     }
 
     fun renderAir(state: ExtraState<AirQuality>, city: City) {
         binding.aqiBlock.visibility = View.VISIBLE
         binding.aqiBlock.setOnClickListener(null)
         binding.aqiBlock.isClickable = false
-        binding.textAqiSource.setText(R.string.aqi_source)
+        val openMeteo = (state as? ExtraState.Ready)?.data?.provider == PROVIDER_OPEN_METEO ||
+            (state !is ExtraState.Ready && isOpenMeteoSelected())
+        binding.textAqiSource.setText(if (openMeteo) R.string.aqi_source_open_meteo else R.string.aqi_source)
+        binding.textAqiSource.setOnClickListener {
+            openUrl(if (openMeteo) OpenMeteoAirApi.SITE_URL else WaqiApi.SITE_URL)
+        }
 
         when (state) {
             is ExtraState.Loading -> message(binding.textAqiMessage, binding.aqiContent, R.string.extra_loading)
@@ -86,7 +92,10 @@ class AirUvRenderer(
                 val distance = if (air.stationLatitude != null && air.stationLongitude != null) {
                     Geo.distanceKm(city.latitude, city.longitude, air.stationLatitude, air.stationLongitude)
                 } else null
-                lines += if (distance != null && distance < MAX_PLAUSIBLE_KM) {
+                lines += if (air.provider == PROVIDER_OPEN_METEO) {
+                    // A modelled grid cell, not a station.
+                    context.getString(R.string.aqi_model_open_meteo)
+                } else if (distance != null && distance < MAX_PLAUSIBLE_KM) {
                     context.getString(R.string.aqi_station_format, air.stationName, distance.roundToInt().coerceAtLeast(1))
                 } else {
                     context.getString(R.string.aqi_station_plain, air.stationName)
@@ -97,7 +106,7 @@ class AirUvRenderer(
                 if (state.stale) lines += context.getString(R.string.extra_stale)
                 binding.textAqiDetail.text = lines.joinToString("\n")
 
-                air.sources.firstOrNull()?.let {
+                if (!openMeteo) air.sources.firstOrNull()?.let {
                     binding.textAqiSource.text = context.getString(R.string.aqi_source_format, it)
                 }
             }
@@ -258,5 +267,7 @@ class AirUvRenderer(
 
         /** Beyond this the "nearest" station is not really local; hide the distance. */
         const val MAX_PLAUSIBLE_KM = 500.0
+
+        const val PROVIDER_OPEN_METEO = "open_meteo"
     }
 }

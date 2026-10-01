@@ -83,6 +83,17 @@ class SettingsActivity : AppCompatActivity() {
         })
         updateApiKeyHint()
 
+        // Air quality source: WAQI stations (token) or Open-Meteo CAMS (no key).
+        binding.radioAqiWaqi.isChecked = settings.aqiSource == SettingsStore.AQI_WAQI
+        binding.radioAqiOpenMeteo.isChecked = settings.aqiSource == SettingsStore.AQI_OPEN_METEO
+        binding.groupAqiSource.setOnCheckedChangeListener { _, id ->
+            settings.aqiSource = if (id == R.id.radioAqiOpenMeteo) {
+                SettingsStore.AQI_OPEN_METEO
+            } else {
+                SettingsStore.AQI_WAQI
+            }
+        }
+
         // WAQI token for the air quality block, saved and trimmed the same way.
         binding.editWaqiToken.setText(settings.waqiToken)
         binding.editWaqiToken.addTextChangedListener(object : TextWatcher {

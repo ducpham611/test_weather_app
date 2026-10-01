@@ -109,3 +109,42 @@ class AirUvTest {
         assertEquals(21.7, km, 1.5)
     }
 }
+
+class OpenMeteoAirTest {
+
+    @org.junit.Test
+    fun parsesUsAqiAndDominantPollutant() {
+        val body = """
+            {"latitude":21.0,"longitude":105.9,"utc_offset_seconds":25200,"timezone":"Asia/Bangkok",
+             "current":{"time":"2026-10-01T17:00","interval":3600,"us_aqi":174,"us_aqi_pm2_5":95,
+             "us_aqi_pm10":32,"us_aqi_ozone":174,"us_aqi_nitrogen_dioxide":10,
+             "us_aqi_sulphur_dioxide":14,"us_aqi_carbon_monoxide":4}}
+        """.trimIndent()
+        val air = com.vnweather.app.domain.AirUvParser.parseOpenMeteoAir(body, 5L)
+        org.junit.Assert.assertEquals(174, air.aqi)
+        org.junit.Assert.assertEquals("o3", air.dominantPollutant)
+        org.junit.Assert.assertEquals("open_meteo", air.provider)
+        org.junit.Assert.assertEquals("2026-10-01T17:00:00+07:00", air.measuredAtIso)
+    }
+
+    @org.junit.Test
+    fun nullAqiOrErrorIsNoData() {
+        for (body in listOf(
+            """{"current":{"time":"2026-10-01T17:00","us_aqi":null}}""",
+            """{"error":true,"reason":"bad"}"""
+        )) {
+            try {
+                com.vnweather.app.domain.AirUvParser.parseOpenMeteoAir(body, 0L)
+                org.junit.Assert.fail()
+            } catch (e: com.vnweather.app.domain.ExtraException) {
+                org.junit.Assert.assertEquals(com.vnweather.app.domain.ExtraError.NO_DATA, e.reason)
+            }
+        }
+    }
+
+    @org.junit.Test
+    fun offsetLabel() {
+        org.junit.Assert.assertEquals("+07:00", com.vnweather.app.domain.AirUvParser.offsetLabel(25200))
+        org.junit.Assert.assertEquals("-03:30", com.vnweather.app.domain.AirUvParser.offsetLabel(-12600))
+    }
+}

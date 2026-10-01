@@ -31,6 +31,27 @@ interface WaqiApi {
 }
 
 /**
+ * Open-Meteo Air Quality API (CAMS global, ~45 km grid). No key, CC BY 4.0.
+ * Only the US AQI and its per-pollutant sub-indices are requested.
+ */
+interface OpenMeteoAirApi {
+
+    @GET("v1/air-quality")
+    suspend fun current(
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
+        @Query("current") current: String = FIELDS,
+        @Query("timezone") timezone: String = "auto"
+    ): ResponseBody
+
+    companion object {
+        const val BASE_URL = "https://air-quality-api.open-meteo.com/"
+        const val SITE_URL = "https://open-meteo.com/en/docs/air-quality-api"
+        val FIELDS = "us_aqi," + com.vnweather.app.domain.AirUvParser.OPEN_METEO_SUB_INDICES.keys.joinToString(",")
+    }
+}
+
+/**
  * UV Index API (uvindexapi.com): no key, NOAA data refreshed once a day,
  * 1,000 requests per day per IP, CC BY-SA 4.0 with a visible link required.
  */

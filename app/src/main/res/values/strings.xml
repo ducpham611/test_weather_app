@@ -173,4 +173,10 @@
     <string name="waqi_token">Air quality token (WAQI)</string>
     <string name="waqi_token_hint">Paste your WAQI token</string>
     <string name="waqi_token_note">Free for personal use. Get a token at aqicn.org/data-platform/token (only an email is needed), paste it here, then pull down to refresh. Tap here to open the sign-up page.</string>
+    <string name="aqi_source_setting">Air quality data source</string>
+    <string name="aqi_source_waqi">WAQI – nearest monitoring station (needs free token)</string>
+    <string name="aqi_source_om">Open-Meteo – CAMS model, US AQI (no key needed)</string>
+    <string name="aqi_source_note">WAQI shows real measurements from the nearest station, which can be far from smaller towns. Open-Meteo estimates the US AQI for any location from the CAMS global model (~45 km grid).</string>
+    <string name="aqi_source_open_meteo">Source: Open-Meteo.com (CAMS) · CC BY 4.0</string>
+    <string name="aqi_model_open_meteo">Estimate from the CAMS global model (~45 km grid)</string>
 </resources>

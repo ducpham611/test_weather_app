@@ -130,6 +130,14 @@ object Diagnostics {
         // Stages 4-5: the AQI and UV blocks, which fail independently.
         val waqiToken = app.settings.waqiToken
         out.appendLine()
+        if (app.settings.aqiSource == SettingsStore.AQI_OPEN_METEO) {
+            out.appendLine("4. Air quality (Open-Meteo, US AQI)")
+            val url = com.vnweather.app.data.remote.OpenMeteoAirApi.BASE_URL +
+                "v1/air-quality?latitude=21.03&longitude=105.85&timezone=auto&current=" +
+                com.vnweather.app.data.remote.OpenMeteoAirApi.FIELDS
+            out.appendLine("   GET $url")
+            out.appendLine("   " + probe(url))
+        } else {
         out.appendLine("4. Air quality (WAQI)")
         out.appendLine("   Token: ${describeKey(waqiToken)}")
         if (waqiToken.isBlank()) {
@@ -138,6 +146,7 @@ object Diagnostics {
             val url = com.vnweather.app.data.remote.WaqiApi.feedUrl(21.03, 105.85, waqiToken)
             out.appendLine("   GET ${redact(url)}")
             out.appendLine("   " + probe(url))
+        }
         }
 
         out.appendLine()

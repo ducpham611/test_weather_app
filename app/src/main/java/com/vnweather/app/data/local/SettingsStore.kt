@@ -46,6 +46,11 @@ class SettingsStore(context: Context) {
         get() = prefs.getString(KEY_TOMORROW_KEY, "")?.trim() ?: ""
         set(value) = prefs.edit().putString(KEY_TOMORROW_KEY, value.trim()).apply()
 
+    /** Where the air quality block gets its US AQI: WAQI stations or Open-Meteo (CAMS). */
+    var aqiSource: String
+        get() = prefs.getString(KEY_AQI_SOURCE, AQI_WAQI) ?: AQI_WAQI
+        set(value) = prefs.edit().putString(KEY_AQI_SOURCE, value).apply()
+
     /** Personal WAQI (aqicn.org) token for the air quality block. */
     var waqiToken: String
         get() = prefs.getString(KEY_WAQI_TOKEN, "")?.trim() ?: ""
@@ -105,6 +110,9 @@ class SettingsStore(context: Context) {
         private const val KEY_LANGUAGE = "language_tag"
         private const val KEY_TOMORROW_KEY = "tomorrow_api_key"
         private const val KEY_WAQI_TOKEN = "waqi_token"
+        private const val KEY_AQI_SOURCE = "aqi_source"
+        const val AQI_WAQI = "waqi"
+        const val AQI_OPEN_METEO = "open_meteo"
         private const val KEY_WEATHER_BG = "weather_background"
         private const val KEY_BG_STYLE = "background_style"
     }

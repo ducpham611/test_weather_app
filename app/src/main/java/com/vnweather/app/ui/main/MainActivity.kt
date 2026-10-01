@@ -252,7 +252,12 @@ class MainActivity : AppCompatActivity() {
             setItemViewCacheSize(12)
         }
         dailyList = DailyListRenderer(binding.dailyContainer)
-        airUv = AirUvRenderer(binding) {
+        airUv = AirUvRenderer(
+            binding,
+            isOpenMeteoSelected = {
+                (application as WeatherApp).settings.aqiSource == SettingsStore.AQI_OPEN_METEO
+            }
+        ) {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
