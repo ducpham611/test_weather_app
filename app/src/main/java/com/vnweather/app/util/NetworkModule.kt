@@ -7,6 +7,8 @@ import com.vnweather.app.BuildConfig
 import com.vnweather.app.data.remote.GeocodingApi
 import com.vnweather.app.data.remote.OpenMeteoApi
 import com.vnweather.app.data.remote.TomorrowApi
+import com.vnweather.app.data.remote.UvIndexApi
+import com.vnweather.app.data.remote.WaqiApi
 import kotlinx.serialization.json.Json
 import okhttp3.ConnectionSpec
 import okhttp3.Interceptor
@@ -50,6 +52,14 @@ object NetworkModule {
 
     val tomorrowApi: TomorrowApi by lazy {
         buildRetrofit(TomorrowApi.BASE_URL).create(TomorrowApi::class.java)
+    }
+
+    val waqiApi: WaqiApi by lazy {
+        buildRetrofit(WaqiApi.BASE_URL).create(WaqiApi::class.java)
+    }
+
+    val uvIndexApi: UvIndexApi by lazy {
+        buildRetrofit(UvIndexApi.BASE_URL).create(UvIndexApi::class.java)
     }
 
     val geocodingApi: GeocodingApi by lazy {

@@ -45,4 +45,18 @@
     <color name="simple_rain">#FF2A6FD6</color>
     <color name="simple_line">#FF8A91A6</color>
     <color name="simple_status_scrim">#33000000</color>
+    <!-- Air quality (US EPA AQI) and UV (WHO) category colours. -->
+    <color name="aqi_good">#FF009966</color>
+    <color name="aqi_moderate">#FFFFDE33</color>
+    <color name="aqi_sensitive">#FFFF9933</color>
+    <color name="aqi_unhealthy">#FFCC0033</color>
+    <color name="aqi_very_unhealthy">#FF660099</color>
+    <color name="aqi_hazardous">#FF7E0023</color>
+    <color name="uv_low">#FF4EB400</color>
+    <color name="uv_moderate">#FFF7E400</color>
+    <color name="uv_high">#FFF18B00</color>
+    <color name="uv_very_high">#FFD8001D</color>
+    <color name="uv_extreme">#FFB54CFF</color>
+    <color name="badge_text_light">#FFFFFFFF</color>
+    <color name="badge_text_dark">#FF212121</color>
 </resources>

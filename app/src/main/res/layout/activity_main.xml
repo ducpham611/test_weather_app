@@ -319,6 +319,220 @@
                             android:text="@string/show_more" />
                     </LinearLayout>
 
+                    <!-- Air quality (WAQI) block. Hidden until the first result arrives. -->
+                    <LinearLayout
+                        android:id="@+id/aqiBlock"
+                        style="@style/GlassBlock"
+                        android:visibility="gone">
+
+                        <TextView
+                            style="@style/GlassTitle"
+                            android:text="@string/aqi_title" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp">
+
+                            <!-- No token / unavailable / loading. -->
+                            <TextView
+                                android:id="@+id/textAqiMessage"
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textSize="13sp"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:id="@+id/aqiContent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:baselineAligned="false"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textAqiValue"
+                                        style="@style/OnGlass"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="sans-serif-light"
+                                        android:includeFontPadding="false"
+                                        android:maxLines="1"
+                                        android:textSize="46sp" />
+
+                                    <!-- Wrapper so a long label wraps instead of
+                                         pushing past the card at large font sizes. -->
+                                    <FrameLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="14dp">
+
+                                        <TextView
+                                            android:id="@+id/textAqiBadge"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="2"
+                                            android:paddingStart="12dp"
+                                            android:paddingEnd="12dp"
+                                            android:paddingTop="5dp"
+                                            android:paddingBottom="5dp"
+                                            android:textColor="@color/badge_text_light"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/textAqiAdvice"
+                                    style="@style/OnGlass.Secondary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/textAqiDetail"
+                                    style="@style/OnGlass.Secondary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <!-- Credit line. Required by the data source's terms. -->
+                            <TextView
+                                android:id="@+id/textAqiSource"
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:background="?attr/selectableItemBackground"
+                                android:minHeight="32dp"
+                                android:gravity="center_vertical"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- UV index (uvindexapi.com) block. Hidden until the first result arrives. -->
+                    <LinearLayout
+                        android:id="@+id/uvBlock"
+                        style="@style/GlassBlock"
+                        android:visibility="gone">
+
+                        <TextView
+                            style="@style/GlassTitle"
+                            android:text="@string/uv_title" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp">
+
+                            <!-- No token / unavailable / loading. -->
+                            <TextView
+                                android:id="@+id/textUvMessage"
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textSize="13sp"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:id="@+id/uvContent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:baselineAligned="false"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textUvValue"
+                                        style="@style/OnGlass"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="sans-serif-light"
+                                        android:includeFontPadding="false"
+                                        android:maxLines="1"
+                                        android:textSize="46sp" />
+
+                                    <!-- Wrapper so a long label wraps instead of
+                                         pushing past the card at large font sizes. -->
+                                    <FrameLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:layout_marginStart="14dp">
+
+                                        <TextView
+                                            android:id="@+id/textUvBadge"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:maxLines="2"
+                                            android:paddingStart="12dp"
+                                            android:paddingEnd="12dp"
+                                            android:paddingTop="5dp"
+                                            android:paddingBottom="5dp"
+                                            android:textColor="@color/badge_text_light"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/textUvAdvice"
+                                    style="@style/OnGlass.Secondary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/textUvDetail"
+                                    style="@style/OnGlass.Secondary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <!-- Credit line. Required by the data source's terms. -->
+                            <TextView
+                                android:id="@+id/textUvSource"
+                                style="@style/OnGlass.Secondary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:background="?attr/selectableItemBackground"
+                                android:minHeight="32dp"
+                                android:gravity="center_vertical"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/textAttribution"
                         style="@style/OnGlass.Secondary"

@@ -7,7 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.vnweather.app.R
 import com.vnweather.app.WeatherApp
+import com.vnweather.app.domain.AirQuality
 import com.vnweather.app.domain.City
+import com.vnweather.app.domain.ExtraState
+import com.vnweather.app.domain.UvForecast
 import com.vnweather.app.domain.Forecast
 import com.vnweather.app.domain.UiState
 import com.vnweather.app.util.AppError
@@ -27,6 +30,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _state = MutableLiveData<UiState>(UiState.Loading)
     val state: LiveData<UiState> = _state
+
+    private val airUvRepository = application.airUvRepository
+
+    /** AQI and UV load on their own; a failure there never blocks the forecast. */
+    private val _air = MutableLiveData<ExtraState<AirQuality>>(ExtraState.Loading)
+    val air: LiveData<ExtraState<AirQuality>> = _air
+
+    private val _uv = MutableLiveData<ExtraState<UvForecast>>(ExtraState.Loading)
+    val uv: LiveData<ExtraState<UvForecast>> = _uv
 
     /**
      * Plain Boolean, not LiveData. The expand toggle has to be readable
@@ -54,6 +66,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 resolveCurrentLocation()
             }
 
+            loadExtras(currentCity, forceRefresh)
+
             // Never pre-judge connectivity. The system flag reports "offline"
             // on some lab devices and captive networks even when traffic flows
             // fine, so always attempt the request and report what really broke.
@@ -69,6 +83,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 }
             )
         }
+    }
+
+    private fun loadExtras(city: City, forceRefresh: Boolean) {
+        // Paint the cached readings first so the blocks never flash empty.
+        if (_air.value !is ExtraState.Ready) {
+            airUvRepository.cachedAir(city)?.let { _air.value = ExtraState.Ready(it, stale = true) }
+        }
+        if (_uv.value !is ExtraState.Ready) {
+            airUvRepository.cachedUv(city)?.let { _uv.value = ExtraState.Ready(it, stale = true) }
+        }
+        viewModelScope.launch { _air.value = airUvRepository.airQuality(city, forceRefresh) }
+        viewModelScope.launch { _uv.value = airUvRepository.uv(city, forceRefresh) }
     }
 
     /**
@@ -88,6 +114,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun selectCity(city: City) {
         currentCity = city
+        // Another place: drop the old readings rather than show them under it.
+        _air.value = ExtraState.Loading
+        _uv.value = ExtraState.Loading
         savedCities.useCurrentLocation = city.isCurrentLocation
         savedCities.setSelectedCity(city)
         load(forceRefresh = false)

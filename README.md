@@ -130,3 +130,22 @@ four see-through blocks on top. **Settings → Appearance → Background** offer
 Breezy's colours (default), VN Weather's own deeper colours, or plain blue.
 All are drawn by `SmoothGradientDrawable`, which blends along one smooth curve
 so there is no seam across the middle. Nothing is animated.
+
+## Air quality and UV blocks
+
+Two blocks under "Upcoming days":
+
+- **Air quality (AQI)** – [World Air Quality Index Project](https://waqi.info/) (aqicn.org).
+  Shows the nearest monitoring station's US-EPA AQI, its category (Good … Hazardous)
+  with health advice, the main pollutant, station name/distance and measurement time.
+  Needs a free personal token (Settings → *Air quality token (WAQI)*, get one at
+  https://aqicn.org/data-platform/token/). WAQI terms: free for non-commercial use,
+  attribution to WAQI and the originating agency is shown in the block; the data may
+  not be redistributed or used in a paid app.
+- **UV index** – [UV Index API](https://uvindexapi.com) (NOAA data, no key,
+  1,000 requests/day/IP, updated once a day). Licensed CC BY-SA 4.0; the block shows
+  a visible link to uvindexapi.com. Shows the current hour's UV, its WHO category
+  (Low … Extreme) with advice, and today's peak.
+
+Both load independently of the forecast and are cached per location (AQI 30 min,
+UV 3 h), so a failure only affects its own block. Diagnostics (Settings) tests both.

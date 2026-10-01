@@ -82,6 +82,27 @@ class SettingsActivity : AppCompatActivity() {
             }
         })
         updateApiKeyHint()
+
+        // WAQI token for the air quality block, saved and trimmed the same way.
+        binding.editWaqiToken.setText(settings.waqiToken)
+        binding.editWaqiToken.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) = Unit
+            override fun afterTextChanged(s: Editable?) {
+                settings.waqiToken = s?.toString().orEmpty()
+            }
+        })
+        binding.textWaqiNote.setOnClickListener {
+            try {
+                startActivity(
+                    android.content.Intent(
+                        android.content.Intent.ACTION_VIEW,
+                        android.net.Uri.parse(com.vnweather.app.data.remote.WaqiApi.TOKEN_URL)
+                    )
+                )
+            } catch (_: android.content.ActivityNotFoundException) {
+            }
+        }
     }
 
     private fun updateApiKeyHint() {

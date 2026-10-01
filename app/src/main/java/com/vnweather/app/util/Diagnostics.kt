@@ -28,6 +28,7 @@ object Diagnostics {
 
     private fun redact(url: String): String =
         url.replace(Regex("apikey=[^&]*"), "apikey=***")
+            .replace(Regex("token=[^&]*"), "token=***")
 
     suspend fun run(context: Context): String = withContext(Dispatchers.IO) {
         val app = context.applicationContext as WeatherApp
@@ -126,6 +127,38 @@ object Diagnostics {
             out.appendLine("- HTTP 400     -> the request was rejected; the body says which parameter.")
         }
 
+        // Stages 4-5: the AQI and UV blocks, which fail independently.
+        val waqiToken = app.settings.waqiToken
+        out.appendLine()
+        out.appendLine("4. Air quality (WAQI)")
+        out.appendLine("   Token: ${describeKey(waqiToken)}")
+        if (waqiToken.isBlank()) {
+            out.appendLine("   SKIPPED - no WAQI token entered in Settings.")
+        } else {
+            val url = com.vnweather.app.data.remote.WaqiApi.feedUrl(21.03, 105.85, waqiToken)
+            out.appendLine("   GET ${redact(url)}")
+            out.appendLine("   " + probe(url))
+        }
+
+        out.appendLine()
+        out.appendLine("5. UV index (uvindexapi.com)")
+        val uvUrl = com.vnweather.app.data.remote.UvIndexApi.BASE_URL +
+            "api/v1/forecast?latitude=21.03&longitude=105.85&timezone=Auto"
+        out.appendLine("   GET $uvUrl")
+        out.appendLine("   " + probe(uvUrl))
+        com.vnweather.app.data.AirUvRepository.lastError?.let {
+            out.appendLine()
+            out.appendLine("Last AQI/UV error: $it")
+        }
+
         out.toString()
     }
+
+    private fun probe(url: String): String = runCatching {
+        val request = Request.Builder().url(url).build()
+        NetworkModule.rawClient.newCall(request).execute().use { response ->
+            val body = response.body?.string().orEmpty().take(300)
+            "HTTP ${response.code}\n   ${body.ifBlank { "(empty body)" }}"
+        }
+    }.fold({ it }, { "FAILED\n   ${AppError.detail(it)}" })
 }

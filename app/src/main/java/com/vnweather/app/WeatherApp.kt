@@ -3,6 +3,7 @@ package com.vnweather.app
 import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.vnweather.app.data.AirUvRepository
 import com.vnweather.app.data.WeatherRepository
 import com.vnweather.app.data.local.ForecastCache
 import com.vnweather.app.data.local.SavedCitiesStore
@@ -29,6 +30,8 @@ class WeatherApp : Application() {
         private set
     lateinit var repository: WeatherRepository
         private set
+    lateinit var airUvRepository: AirUvRepository
+        private set
 
     /** Surfaced in the diagnostics screen: modern TLS is the usual suspect. */
     var conscryptInstalled: Boolean = false
@@ -45,6 +48,12 @@ class WeatherApp : Application() {
             tomorrowApi = NetworkModule.tomorrowApi,
             geocodingApi = NetworkModule.geocodingApi,
             cache = ForecastCache(this),
+            settings = settings
+        )
+        airUvRepository = AirUvRepository(
+            context = this,
+            waqiApi = NetworkModule.waqiApi,
+            uvApi = NetworkModule.uvIndexApi,
             settings = settings
         )
 

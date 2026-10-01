@@ -46,6 +46,11 @@ class SettingsStore(context: Context) {
         get() = prefs.getString(KEY_TOMORROW_KEY, "")?.trim() ?: ""
         set(value) = prefs.edit().putString(KEY_TOMORROW_KEY, value.trim()).apply()
 
+    /** Personal WAQI (aqicn.org) token for the air quality block. */
+    var waqiToken: String
+        get() = prefs.getString(KEY_WAQI_TOKEN, "")?.trim() ?: ""
+        set(value) = prefs.edit().putString(KEY_WAQI_TOKEN, value.trim()).apply()
+
     /** Language tag the widget reads; the widget has no AppCompat context. */
     var languageTag: String
         get() = prefs.getString(KEY_LANGUAGE, "") ?: ""
@@ -99,6 +104,7 @@ class SettingsStore(context: Context) {
         private const val KEY_MODEL = "weather_model"
         private const val KEY_LANGUAGE = "language_tag"
         private const val KEY_TOMORROW_KEY = "tomorrow_api_key"
+        private const val KEY_WAQI_TOKEN = "waqi_token"
         private const val KEY_WEATHER_BG = "weather_background"
         private const val KEY_BG_STYLE = "background_style"
     }

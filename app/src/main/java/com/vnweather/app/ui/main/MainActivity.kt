@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private val hourlyAdapter = HourlyAdapter()
     private lateinit var dailyList: DailyListRenderer
+    private lateinit var airUv: AirUvRenderer
 
     /** Read once per resume; the Settings screen can flip it while we are away. */
     private var backgroundStyle = SettingsStore.BG_BREEZY
@@ -166,7 +167,9 @@ class MainActivity : AppCompatActivity() {
             binding.currentCard,
             binding.detailRow,
             binding.hourlyBlock,
-            binding.dailyBlock
+            binding.dailyBlock,
+            binding.aqiBlock,
+            binding.uvBlock
         ).forEach { it.setBackgroundResource(R.drawable.bg_simple_card) }
         binding.buttonShowMore.setBackgroundResource(R.drawable.bg_simple_pill)
 
@@ -249,6 +252,9 @@ class MainActivity : AppCompatActivity() {
             setItemViewCacheSize(12)
         }
         dailyList = DailyListRenderer(binding.dailyContainer)
+        airUv = AirUvRenderer(binding) {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
 
     private fun setupActions() {
@@ -282,6 +288,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun observe() {
         viewModel.state.observe(this) { state -> render(state) }
+        viewModel.air.observe(this) { airUv.renderAir(it, viewModel.city) }
+        viewModel.uv.observe(this) { airUv.renderUv(it) }
     }
 
     private fun render(state: UiState) {
