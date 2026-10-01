@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rain-chance drop: an outline, plus a fill that rises from the bottom.
+     The fill height comes from the drawable level, set by RainDrop in code
+     (empty, 1/4, 1/2, 3/4 or full). One colour for both; the tint is applied
+     by the TextView, so the Simple theme can recolour it. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <clip
+            android:clipOrientation="vertical"
+            android:gravity="bottom"
+            android:drawable="@drawable/ic_drop_fill" />
+    </item>
+    <item android:drawable="@drawable/ic_drop_outline" />
+</layer-list>

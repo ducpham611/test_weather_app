@@ -3,6 +3,7 @@
      No horizontal padding on the root: the temperature line has to reach
      both edges so neighbouring cells join up. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:minWidth="64dp"
@@ -55,5 +56,9 @@
         android:paddingStart="6dp"
         android:paddingEnd="6dp"
         android:maxLines="1"
+        android:gravity="center_vertical"
+        android:drawableStart="@drawable/ic_drop_level_small"
+        app:drawableTint="@color/rain_on_glass"
+        android:drawablePadding="2dp"
         android:textSize="11sp" />
 </LinearLayout>

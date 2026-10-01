@@ -91,6 +91,7 @@ class HourlyAdapter : ListAdapter<HourlyItem, HourlyAdapter.VH>(DIFF) {
             val pop = item.precipitationProbability
             if (pop != null && pop > 0) {
                 binding.textRain.text = context.getString(R.string.percent_format, pop)
+                RainDrop.apply(binding.textRain, pop)
                 binding.textRain.visibility = android.view.View.VISIBLE
             } else {
                 binding.textRain.visibility = android.view.View.INVISIBLE

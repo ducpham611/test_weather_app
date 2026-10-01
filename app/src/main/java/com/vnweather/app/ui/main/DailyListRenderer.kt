@@ -66,6 +66,7 @@ class DailyListRenderer(private val container: LinearLayout) {
         val pop = item.precipitationProbabilityMax
         if (pop != null && pop > 0) {
             binding.textRain.text = context.getString(R.string.percent_format, pop)
+            RainDrop.apply(binding.textRain, pop)
             binding.textRain.visibility = View.VISIBLE
         } else {
             binding.textRain.visibility = View.INVISIBLE
