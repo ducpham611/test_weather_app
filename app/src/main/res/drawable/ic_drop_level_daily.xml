@@ -8,7 +8,7 @@
         <clip
             android:clipOrientation="vertical"
             android:gravity="bottom"
-            android:drawable="@drawable/ic_drop_fill" />
+            android:drawable="@drawable/ic_drop_fill_daily" />
     </item>
-    <item android:drawable="@drawable/ic_drop_outline" />
+    <item android:drawable="@drawable/ic_drop_outline_daily" />
 </layer-list>

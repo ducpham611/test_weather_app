@@ -48,19 +48,19 @@
         app:layout_constraintStart_toEndOf="@id/imageIcon"
         app:layout_constraintEnd_toStartOf="@id/textRain" />
 
-    <!-- Rain chance: blue droplet above the percentage -->
+    <!-- Rain chance: drop to the left of the percentage. Width is set in
+         code (DailyListRenderer.alignColumns) so every drop lines up and the
+         gap to the low temperature matches the low-to-high gap. -->
     <TextView
         android:id="@+id/textRain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:minWidth="36dp"
-        android:gravity="center"
+        android:gravity="start|center_vertical"
         android:maxLines="1"
-        android:drawableTop="@drawable/ic_drop_level"
+        android:drawableStart="@drawable/ic_drop_level_daily"
         app:drawableTint="@color/rain_on_glass"
-        android:drawablePadding="1dp"
-        android:textSize="12sp"
+        android:drawablePadding="2dp"
+        android:textSize="13sp"
         style="@style/OnGlass.Rain"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
